@@ -236,7 +236,7 @@
         }
         
 
-        $( this.slider.firstChild ).css( this.box.isHorizontal ? "left" : "top", offset );
+        $( this.slider.firstChild ).css( this.box.isHorizontal ? "left" : "bottom", offset );
     }
 
     $.fn.slider = function( option ) {
