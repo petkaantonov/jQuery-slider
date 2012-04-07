@@ -208,7 +208,7 @@
         }
         else {
             pxOffset = ( Math.max( Math.min( e.pageY, box.bottom ), box.top ) - box.top );
-            position = pxOffset / ( box.bottom - box.top );
+            position = ( 1 - ( pxOffset / ( box.bottom - box.top ) ) );
         }
 
         value = ( this.max - this.min ) * position + this.min;
