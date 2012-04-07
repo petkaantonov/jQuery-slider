@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 65px;
+        }
+        
+        .slider.addon-slider {
+            width: 140px;
+            padding-left: 10px;
+            padding-right: 12px;
+        }
+        
+        .add-on .input-slider {
+            top: -3px;
+        }
+        
+
+    </style>
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    
+ </head>
+ <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <span class="brand">Test page</span>
+          <div class="nav-collapse">
+            <ul class="nav">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container well">
+        <div class="row">
+            
+            <div class="span7">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Nice form</legend>
+
+                        <div class="control-group">
+                            <label class="control-label">Default range</label>
+                            <div class="controls">
+                                <div class="slider span2">
+                                
+                                </div>
+                              <input data-enhancement="slider" class="span1">                              
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+ 
+                         <div class="control-group">
+                             <label class="control-label">Short range</label>
+                             <div class="controls">
+                                 <div class="slider span2">
+                                 
+                                 </div>
+                               <input data-enhancement="slider" data-min="1" data-max="5" class="span1">                              
+                               <span class="help-inline"></span>
+                             </div>
+                        </div>
+ 
+                        <div class="control-group">
+                            <label class="control-label">Negative range</label>
+                            <div class="controls">
+                                <div class="slider span2">
+                                
+                                </div>
+                              <input data-enhancement="slider" data-max="10" data-min="-10" value="0" class="span1">                              
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label class="control-label">Decimal range</label>
+                            <div class="controls">
+                                <div class="slider span2">
+                                
+                                </div>
+                                <!-- immune against 0.300000000004 etc
+                                     fixed decimal display automatically determined from step precision
+                                -->
+                              <input data-enhancement="slider" data-max="1" data-min="0" data-step="0.01" value="0.05" class="span1">                              
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label class="control-label" >Negative decimal range</label>
+                            <div class="controls">
+                                <div class="slider span2">
+                                
+                                </div>
+                              <input data-enhancement="slider"  data-max="1" data-min="-0.1" data-step="0.01" value="nan" class="span1">                              
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+ 
+ 
+                        <div class="control-group">
+                            <label class="control-label">Disabled</label>
+                            <div class="controls">
+                                <div class="slider span2">
+                                
+                                </div>
+                              <input data-enhancement="slider" class="span1" disabled>                              
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+ 
+ 
+                        <div class="control-group">
+                            <label class="control-label">Bootstrap append & prepend</label>
+                            <div class="controls">
+                                <div class="input-prepend input-append">
+                                    <div class="add-on slider addon-slider"></div>
+                                    <input data-enhancement="slider" data-max="5" data-min="0" data-step="0.05" value="0.25" class="span1">
+                                    <span class="add-on">€</span>
+                                </div>
+                                                        
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+   
+                       <div class="control-group">
+                               <label class="control-label">Multiple in same container</label>
+                               <div class="controls">
+                                   <div class="slider vertical" style="height: 130px";></div>
+                                   <input data-enhancement="slider" data-max="100" class="span1 hide">
+                                   <input data-enhancement="slider" data-max="100" class="span1 hide">
+                                   <input data-enhancement="slider" data-max="100" class="span1 hide">
+                                   <input data-enhancement="slider" data-max="100" class="span1 hide">
+                                   <input data-enhancement="slider" data-max="100" class="span1 hide">
+                                   <input data-enhancement="slider" data-max="100" class="span1 hide">
+                                 <span class="help-inline"></span>
+                               </div>
+                        </div>
+   
+                        <div class="form-actions">
+
+                            <button type="submit" class="btn btn-primary" data-loading-text="Saving changes...">Save changes</button>
+                            <span class="label label-success fade out">Saved successfully</span>
+                        </div>
+                        
+
+
+                      
+                    </fieldset>
+                    
+                </form>
+            </div>
+            <div class="span5"></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="./bootstrap-slider.js"></script>
+
+    <script type="text/javascript">
+        $("#volume").bind( "slideend", function(){
+            $( this).next()
+                    .html( "The value was <b>"+this.value+"</b>" )
+                    .stop( true, true )
+                    .show().delay(500).fadeOut( 400 );
+        });
+    </script>
+ </body>
+</html>
