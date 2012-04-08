@@ -1,12 +1,13 @@
 !function ( $, window, document, undefined ) {
     //Helpers
     
-    function returnFalse(e) {
+    function preventDefault(e) {
         e.preventDefault();
-        return false;
     }
     
     function numberOrDefault( str, fallback ) {
+        str = (str + "").replace( ",", "." );
+        
         if( isNaN( str ) ) {
             return fallback;
         }
@@ -50,8 +51,6 @@
     }();
     
     //Constructor
-    //addon append ja prepend juttu ;)
-    //Test scroll .offset()
     function Slider( element, options ) {
         this.element = element;
         if( element.nodeName.toLowerCase() !== "input" ) {
@@ -62,7 +61,7 @@
     }
     //Public methods
     Slider.prototype = {
-    
+
         disabled: function( val ) {
             val = !!val;
             this.isDisabled = val;
@@ -76,7 +75,7 @@
    
         destroy: function() {
             $( this.slider ).remove();
-            $( this.element ).removeData( "slider" );
+            $( this.element ).unbind( ".slider" ).removeData( "slider" );
         },
 
         constructor: Slider
@@ -156,12 +155,9 @@
     
     
     //Begin the slider drag process
-    function onmousedown( e ) {
-        
-            
+    function onmousedown( e ) {            
         if( e.which === 1 && !this.isDisabled ) {
             calculateBox.call( this );
-            
             
             clearSelection();
             
@@ -169,22 +165,21 @@
                 "mousemove.slider": $.proxy( onmousemove, this ),
                 //in case mouse is released while holding perfectly still and e.which !== 1 in mousemove handler isn't detected   
                 "mouseup.slider": $.proxy( unbindmousemove, this ),
-                "selectstart.slider": returnFalse, //Remove all this crap while dragging
-                "dragstart.slider": returnFalse
+                "selectstart.slider": preventDefault, //Remove all this crap while dragging
+                "dragstart.slider": preventDefault
             });
 
             $( this.slider ).addClass( "focused" );
             this.isSliding = true;
             
             $( this.element ).trigger( "slidestart" );
-            onmousemove.call( this, e );
-            
+            onmousemove.call( this, e );            
         }
     }
     
     function unbindmousemove() {
         if( this.isSliding ) {
-            $( document ).unbind( "mousemove.slider selectstart.slider dragstart.slider mouseup.slider" );
+            $( document ).unbind( ".slider" );
             $( this.slider ).removeClass( "focused" );
             this.isSliding = false;
             $( this.element ).trigger( "slideend" );
