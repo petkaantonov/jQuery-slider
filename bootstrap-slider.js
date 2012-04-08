@@ -110,7 +110,7 @@
             this.decimals = this.step.toString().length - ( decimalIndex + 1 );
         }
                 
-        this.slider = $( this.options.template ).appendTo( $( this.element ).siblings( ".slider" ) ).get( 0 );
+        this.slider = $( this.options.template ).appendTo( $( $( this.element ).attr("data-target") ) ).get( 0 );
         this.disabled( this.element.disabled );
         
         $( this.element ).bind( {
@@ -257,6 +257,7 @@
         min: 1,
         max: 100,
         step: 1,
+        
         template: '<div class="input-slider"><div class="input-slider-knob"></div></div>'
     };
     
