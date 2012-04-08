@@ -261,7 +261,7 @@
     };
     
     $( function() {
-        $( "[data-enhancement='slider']" ).slider();
+        $( "[data-enhance='slider']" ).slider();
     });
     
 
