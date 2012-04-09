@@ -148,9 +148,25 @@
         this.box.right = width + this.box.left;
         this.box.bottom = height + this.box.top;
         this.box.isHorizontal = width >= height;
-        
-    
     }
+    
+    function calculateDragStartOffset(e) {
+        var offset;
+        
+        if( e.target === this.slider.firstChild ) { //The drag started on the knob
+            offset = $( this.slider.firstChild ).offset();
+            if( this.box.isHorizontal ) {
+                this.dragOffset = e.pageX - offset.left;
+            }
+            else {
+                this.dragOffset = this.knobBox.height - (e.pageY - offset.top);
+            }            
+        }
+        else { //The drag was started somewhere not on the knob - assume middle 
+            this.dragOffset = this.box.isHorizontal ? this.knobBox.width / 2 : this.knobBox.height / 2;
+        }
+    }
+    
     //React to change events on the original input
     function onchange(e) {
         var val = numberOrDefault( this.element.value, this.min );
@@ -222,6 +238,8 @@
         }
     }
     
+    
+    
     //Begin the slider drag process
     function onmousedown( e ) {            
         if( e.which === 1 && !this.isDisabled ) {
@@ -234,6 +252,7 @@
             }
             
             calculateBox.call( this );
+            calculateDragStartOffset.call( this, e );
             
             clearSelection();
             
@@ -297,6 +316,12 @@
     function setValue( value ) {
         var offset, progress,
             span;
+            
+        if( typeof this.dragOffset == "undefined" ) {
+            calculateBox.call( this );
+            calculateDragStartOffset.call( this, {});
+            
+        }
         
         value = normalize( value );
         this.element.value = this.decimals ? value.toFixed(this.decimals) : value;
@@ -304,11 +329,11 @@
 
         if( this.box.isHorizontal ) {
             span = this.box.right - this.box.left; //Settle the knob 2 pixels over edges
-            offset =  Math.max( -2, Math.min( progress * span - this.knobBox.width / 2, span - this.knobBox.width + 2) ) + "px";
+            offset =  Math.max( -2, Math.min( progress * span - (this.dragOffset), span - (this.knobBox.width) + 2) ) + "px";
         }
         else {
             span = this.box.bottom - this.box.top;
-            offset =  Math.max( -2, Math.min( progress * span - this.knobBox.height / 2, span - this.knobBox.height + 2 ) ) + "px";
+            offset =  Math.max( -2, Math.min( progress * span - (this.dragOffset), span - (this.knobBox.height) + 2 ) ) + "px";
         }
         
 
