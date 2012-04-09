@@ -117,6 +117,10 @@
         });
         
         $( this.slider ).bind( "mousedown.slider", $.proxy( onmousedown, this ) );
+        
+        if( "step" in this.element ) {
+            this.element.step = this.step;       
+        }
 
         calculateBox.call( this );
         setValue.call( this, snap( Math.max( Math.min( val, this.max ), this.min ), this.step ) );
