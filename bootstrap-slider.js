@@ -113,10 +113,16 @@
         $( this.element ).bind( {
             "change.slider": $.proxy( onchange, this ),
             "input.slider": $.proxy( onchange, this ),
-            "keydown.slider": $.proxy( onkeydown, this )
+            "keydown.slider": $.proxy( onkeydown, this ),
+            "mousewheel.slider": $.proxy( onmousewheel, this ),
+            "DOMMouseScroll.slider": $.proxy( onmousewheel, this )
         });
         
-        $( this.slider ).bind( "mousedown.slider", $.proxy( onmousedown, this ) );
+        $( this.slider ).bind( {
+            "mousedown.slider": $.proxy( onmousedown, this ),
+            "mousewheel.slider": $.proxy( onmousewheel, this ),
+            "DOMMouseScroll.slider": $.proxy( onmousewheel, this )
+        }); 
         
         if( "step" in this.element ) {
             this.element.step = this.step;       
@@ -160,12 +166,14 @@
             case 38: // up
                 e.preventDefault();
                 setValue.call( this, Math.min( this.max, val += this.step ) );
+                $( this.element ).trigger( "slide" );
             
             break;
             
             case 40: //down
                 e.preventDefault();
                 setValue.call( this, Math.max( this.min, val -= this.step ) );
+                $( this.element ).trigger( "slide" );
             break;
             
             case 13: //esc or enter
@@ -177,8 +185,30 @@
     }
     
     function onmousewheel( e ) {
-        e.preventDefault();
         
+        var evt = e.originalEvent,
+            val = numberOrDefault( this.element.value, this.min ),
+            delta;
+        //Scrollwheel doing multiple things at once is always bad
+        e.preventDefault(); 
+        e.stopImmediatePropagation();
+        
+        if( evt.wheelDelta ) {
+            delta = normalize( evt.wheelDelta / 120 );
+        }
+        else if( evt.detail ) {
+            delta = -1 * normalize( evt.detail / 3 );
+        }
+        
+        if( delta ) {
+            if( delta > 0 ) {
+                setValue.call( this, Math.min( this.max, val += this.step ) );          
+            }
+            else {
+                setValue.call( this, Math.max( this.min, val -= this.step ) );           
+            }
+            $( this.element ).trigger( "slide" );
+        }
     }
     
     //Begin the slider drag process
