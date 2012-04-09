@@ -60,164 +60,164 @@
 <!-- yeah the html is unindented because the html is reused to dynamically create a pre -->
 
 <div class="control-group">
-    <div class="span2">
-       <h4>Default range <small>Default settings are min=1, max=100, step=1</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="default"></div>
-        <input data-slider="#default" class="span1">
-        <span class="help-inline"></span>
-    </div>
+<div class="span2">
+   <h4>Default range <small>Default settings are min=1, max=100, step=1</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="default"></div>
+    <input data-slider="#default" class="span1">
+    <span class="help-inline"></span>
+</div>
 </div>
 
 
 <div class="control-group">
-    <div class="span2">
-       <h4>Short range <small>The slider snaps in proper increments</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="short-range"></div>
-        <input data-slider="#short-range" data-min="1" data-max="5" class="span1">
-        <span class="help-inline"></span>
-    </div>
+<div class="span2">
+   <h4>Short range <small>The slider snaps in proper increments</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="short-range"></div>
+    <input data-slider="#short-range" data-min="1" data-max="5" class="span1">
+    <span class="help-inline"></span>
+</div>
 </div>
  
 <div class="control-group">
-    <div class="span2">
-       <h4>Negative range <small>...</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="negative-range"></div>
-        <input data-slider="#negative-range" data-max="10" data-min="-10" value="0" class="span1">
-        <span class="help-inline"></span>
-    </div>
+<div class="span2">
+   <h4>Negative range <small>...</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="negative-range"></div>
+    <input data-slider="#negative-range" data-max="10" data-min="-10" value="0" class="span1">
+    <span class="help-inline"></span>
+</div>
 </div>
                         
 <div class="control-group">
-    <div class="span2">
-       <h4>Decimal range <small>without floating point issues</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="decimal-range"></div>
-        <input data-slider="#decimal-range" data-max="1" data-min="0" data-step="0.01" value="0.05" class="span1">
-        <span class="help-inline"></span>
-    </div>
+<div class="span2">
+   <h4>Decimal range <small>without floating point issues</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="decimal-range"></div>
+    <input data-slider="#decimal-range" data-max="1" data-min="0" data-step="0.01" value="0.05" class="span1">
+    <span class="help-inline"></span>
+</div>
 </div>
                         
 <div class="control-group">
-    <div class="span2">
-       <h4>Negative decimal range <small>ditto for floating point issues</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="negative-decimal-range"></div>
-        <input data-slider="#negative-decimal-range" data-max="1" data-min="-0.1" data-step="0.01" value="nan" class="span1">
-        <span class="help-inline"></span>
-    </div>
+<div class="span2">
+   <h4>Negative decimal range <small>ditto for floating point issues</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="negative-decimal-range"></div>
+    <input data-slider="#negative-decimal-range" data-max="1" data-min="-0.1" data-step="0.01" value="nan" class="span1">
+    <span class="help-inline"></span>
+</div>
 </div>
 
 
 <div class="control-group">
-    <div class="span2">
-       <h4>Disabled <small>the slider automatically reads the disabled attribute of input</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="disabled-range"></div>
-        <input data-slider="#disabled-range" class="span1" disabled="disabled">
-        <span class="help-inline"></span>
-    </div>
+<div class="span2">
+   <h4>Disabled <small>the slider automatically reads the disabled attribute of input</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="disabled-range"></div>
+    <input data-slider="#disabled-range" class="span1" disabled="disabled">
+    <span class="help-inline"></span>
+</div>
 </div>
 
 
 <div class="control-group">
-    <label class="control-label"><h4>Bootstrap append & prepend</h4></label>
-    <div class="controls">
-        <div class="input-prepend input-append">
-            <div class="add-on slider addon-slider" id="addon-range"></div>
-            <input data-slider="#addon-range" data-max="5" data-min="0" data-step="0.05" value="0.25" class="span1">
-            <span class="add-on">€</span>
-        </div>
-        <span class="help-inline"></span>
+<label class="control-label"><h4>Bootstrap append & prepend</h4></label>
+<div class="controls">
+    <div class="input-prepend input-append">
+        <div class="add-on slider addon-slider" id="addon-range"></div>
+        <input data-slider="#addon-range" data-max="5" data-min="0" data-step="0.05" value="0.25" class="span1">
+        <span class="add-on">€</span>
     </div>
+    <span class="help-inline"></span>
+</div>
 </div>
 
 <div class="control-group">
-    <div class="span2">
-       <h4>Multiple in same container <small>the slider automatically uses y axis if height > width. No need to specify yet another option.</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider vertical" style="height: 130px"; id="multiple-range"></div>
-        <input data-max="100" value="75" class="hide" data-slider="#multiple-range">
-        <input data-max="100" value="72" class="hide" data-slider="#multiple-range">
-        <input data-max="100" value="69" class="hide" data-slider="#multiple-range">
-        <input data-max="100" value="66" class="hide" data-slider="#multiple-range">
-        <input data-max="100" value="63" class="hide" data-slider="#multiple-range">
-        <input data-max="100" value="60" class="hide" data-slider="#multiple-range">
-        <span class="help-inline"></span>
-    </div>
+<div class="span2">
+   <h4>Multiple in same container <small>the slider automatically uses y axis if height > width. No need to specify yet another option.</small></h4>
+</div>
+<div class="controls">
+    <div class="slider vertical" style="height: 130px"; id="multiple-range"></div>
+    <input data-max="100" value="75" class="hide" data-slider="#multiple-range">
+    <input data-max="100" value="72" class="hide" data-slider="#multiple-range">
+    <input data-max="100" value="69" class="hide" data-slider="#multiple-range">
+    <input data-max="100" value="66" class="hide" data-slider="#multiple-range">
+    <input data-max="100" value="63" class="hide" data-slider="#multiple-range">
+    <input data-max="100" value="60" class="hide" data-slider="#multiple-range">
+    <span class="help-inline"></span>
+</div>
 </div>
 
 <div class="control-group">
-    <div class="span2">
-        <h4>Prevent default <small>-prevent default on the slidestart event</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="prevent-default"></div>
-        <input id="prevent-default-input" data-slider="#prevent-default" class="span1" value="25">
-        <span class="help-inline"></span>
-    </div>
-    <script type="text/javascript">
-        $( "#prevent-default-input").bind( "slidestart", function(e){
-            e.preventDefault();
-        });
-   </script>
+<div class="span2">
+    <h4>Prevent default <small>-prevent default on the slidestart event</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="prevent-default"></div>
+    <input id="prevent-default-input" data-slider="#prevent-default" class="span1" value="25">
+    <span class="help-inline"></span>
+</div>
+<script type="text/javascript">
+    $( "#prevent-default-input").bind( "slidestart", function(e){
+        e.preventDefault();
+    });
+</script>
 </div>
 
 <div class="control-group">
-    <div class="span2">
-        <h4>Hidden input <small>-hide the original input and report the value in some other way</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="hidden-input"></div>
-        <input id="hidden-input-input" data-slider="#hidden-input" class="span1 hide" value="25">
-        <span class="help-inline"></span>
-    </div>
-    <script type="text/javascript">    
-        $("#hidden-input-input").bind( "slide", function(){
-            $( this ).next().html( "The value is: " + this.value );
-        }).trigger("slide"); //Show the initial value
-    </script>
+<div class="span2">
+    <h4>Hidden input <small>-hide the original input and report the value in some other way</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="hidden-input"></div>
+    <input id="hidden-input-input" data-slider="#hidden-input" class="span1 hide" value="25">
+    <span class="help-inline"></span>
+</div>
+<script type="text/javascript">    
+    $("#hidden-input-input").bind( "slide", function(){
+        $( this ).next().html( "The value is: " + this.value );
+    }).trigger("slide"); //Show the initial value
+</script>
 </div>
 
 
 <div class="control-group">
-    <div class="span2">
-        <h4>Datetime input <small>-hide the original input and interpret the numbers as date in custom slide event</small></h4>
-    </div>
-    <div class="controls">
-        <div class="slider span2" id="date-input"></div>
-        <input id="date-input-input" data-slider="#date-input" class="hide" value="22232895" data-min="22232895" data-max="22234335" data-step="15">
-        <span class="help-inline"></span>
-    </div>
-    <script type="text/javascript">
-        $("#date-input-input").bind( "slide", function(){
-            $( this ).next().html( "The value is: " + ( new Date ( this.value * 1000 * 60 ) + "" ) );
-        }).trigger("slide"); //Show the initial value    
-    </script>
+<div class="span2">
+    <h4>Datetime input <small>-hide the original input and interpret the numbers as date in custom slide event</small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="date-input"></div>
+    <input id="date-input-input" data-slider="#date-input" class="hide" value="22232895" data-min="22232895" data-max="22234335" data-step="15">
+    <span class="help-inline"></span>
+</div>
+<script type="text/javascript">
+    $("#date-input-input").bind( "slide", function(){
+        $( this ).next().html( "The value is: " + ( new Date ( this.value * 1000 * 60 ) + "" ) );
+    }).trigger("slide"); //Show the initial value    
+</script>
 </div>
 
 <div class="control-group">
-    <div class="span2">
-        <h4>Input inside a scrollable div <small>can be scrolled without affecting div scrollbar</small></h4>
+<div class="span2">
+    <h4>Input inside a scrollable div <small>can be scrolled without affecting div scrollbar</small></h4>
+</div>
+<div class="controls">
+    <div style="max-height:200px;overflow-y:scroll;">
+        <div style="width:100%;height:180px;"></div>
+        <div class="slider vertical" style="height: 130px"; id="inside-scrollable"></div>
+        <br>
+        <input data-slider="#inside-scrollable" class="span1">
+        <span class="help-inline"></span>
     </div>
-    <div class="controls">
-        <div style="max-height:200px;overflow-y:scroll;">
-            <div style="width:100%;height:180px;"></div>
-            <div class="slider vertical" style="height: 130px"; id="inside-scrollable"></div>
-            <br>
-            <input data-slider="#inside-scrollable" class="span1">
-            <span class="help-inline"></span>
-        </div>
-    </div>
+</div>
 </div>
  
                         <div class="form-actions">
@@ -240,7 +240,7 @@
 
     <script type="text/javascript">        
         $( ".control-group" ).each( function(){
-            $(this).after( $( '<pre>', {'class': "prettyprint"} ).text( $.trim( this.outerHTML ) ) );
+            $(this).after( $( '<pre>', {'class': "prettyprint"} ).text( $.trim( this.innerHTML ) ) );
         });
         
         $( window.prettyPrint );
