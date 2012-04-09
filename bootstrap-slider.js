@@ -53,9 +53,6 @@
     //Constructor
     function Slider( element, options ) {
         this.element = element;
-        if( element.nodeName.toLowerCase() !== "input" ) {
-            $.error( "Slider can only enhance elements of type 'input'" );
-        }
         this.options = options;
         init.call( this );
     }
@@ -235,7 +232,7 @@
     }
 
     $.fn.slider = function( option ) {
-        return this.each( function() {
+        return this.filter("input").each( function() {
             
             var $this = $( this ),
                 data = $this.data( "slider" ),
@@ -262,7 +259,7 @@
     };
     
     $( function() {
-        $( "[data-enhance='slider']" ).slider();
+        $( "input[data-enhance='slider']" ).slider();
     });
     
 
