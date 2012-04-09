@@ -50,7 +50,7 @@
                         <legend>Nice form</legend>
 
                         <div class="control-group">
-                            <label class="control-label">Default range</label>
+                            <label class="control-label"><h4>Default range</h4></label>
                             <div class="controls">
                                 <div class="slider span2" id="default">
                                 
@@ -61,7 +61,7 @@
                         </div>
  
                          <div class="control-group">
-                             <label class="control-label">Short range</label>
+                             <label class="control-label"><h4>Short range</h4></label>
                              <div class="controls">
                                  <div class="slider span2" id="short-range">
                                  
@@ -72,7 +72,7 @@
                         </div>
  
                         <div class="control-group">
-                            <label class="control-label">Negative range</label>
+                            <label class="control-label"><h4>Negative range</h4></label>
                             <div class="controls">
                                 <div class="slider span2" id="negative-range">
                                 
@@ -83,7 +83,7 @@
                         </div>
                         
                         <div class="control-group">
-                            <label class="control-label">Decimal range</label>
+                            <label class="control-label"><h4>Decimal range</h4></label>
                             <div class="controls">
                                 <div class="slider span2" id="decimal-range">
                                 
@@ -94,7 +94,7 @@
                         </div>
                         
                         <div class="control-group">
-                            <label class="control-label" >Negative decimal range</label>
+                            <label class="control-label"><h4>Negative decimal range</h4></label>
                             <div class="controls">
                                 <div class="slider span2" id="negative-decimal-range">
                                 
@@ -106,7 +106,7 @@
  
  
                         <div class="control-group">
-                            <label class="control-label">Disabled</label>
+                            <label class="control-label"><h4>Disabled</h4></label>
                             <div class="controls">
                                 <div class="slider span2" id="disabled-range">
                                 
@@ -118,7 +118,7 @@
  
  
                         <div class="control-group">
-                            <label class="control-label">Bootstrap append & prepend</label>
+                            <label class="control-label"><h4>Bootstrap append & prepend</h4></label>
                             <div class="controls">
                                 <div class="input-prepend input-append">
                                     <div class="add-on slider addon-slider" id="addon-range"></div>
@@ -131,7 +131,7 @@
                         </div>
    
                        <div class="control-group">
-                               <label class="control-label">Multiple in same container</label>
+                               <label class="control-label"><h4>Multiple in same container</h4></label>
                                <div class="controls">
                                    <div class="slider vertical" style="height: 130px"; id="multiple-range"></div>
                                    <input data-enhance="slider" data-max="100" value="75" class="hide" data-target="#multiple-range">
@@ -146,12 +146,23 @@
 
 
                         <div class="control-group">
-                            <label class="control-label">Number input</label>
+                            <label class="control-label"><h4>Number input</h4></label>
                             <div class="controls">
                                 <div class="slider span2" id="number">
                                 
                                 </div>
                               <input data-enhance="slider" data-target="#number" class="span1" type="number">                              
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label"><h4>Prevent default <small>-slider can be adjusted via the original input only</small></h4></label>
+                            <div class="controls">
+                                <div class="slider span2" id="prevent-default">
+                                
+                                </div>
+                              <input data-enhance="slider" id="prevent-default-input" data-target="#prevent-default" class="span1" value="25">                              
                               <span class="help-inline"></span>
                             </div>
                         </div>
@@ -180,6 +191,10 @@
                     .html( "The value was <b>"+this.value+"</b>" )
                     .stop( true, true )
                     .show().delay(500).fadeOut( 400 );
+        });
+        
+        $( "#prevent-default-input").bind( "slidestart", function(e){
+            e.preventDefault();
         });
     </script>
  </body>

@@ -159,6 +159,14 @@
     //Begin the slider drag process
     function onmousedown( e ) {            
         if( e.which === 1 && !this.isDisabled ) {
+            var slideEvt = $.Event( "slidestart");
+            $( this.element ).trigger( slideEvt );
+            
+            if( slideEvt.isDefaultPrevented() ) {
+                e.preventDefault();
+                return;
+            }
+            
             calculateBox.call( this );
             
             clearSelection();
@@ -174,7 +182,7 @@
             $( this.slider ).addClass( "focused" );
             this.isSliding = true;
             
-            $( this.element ).trigger( "slidestart" );
+            
             onmousemove.call( this, e );            
         }
     }
