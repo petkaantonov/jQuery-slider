@@ -150,7 +150,7 @@
     }
     //React to change events on the original input
     function onchange(e) {
-        var val = e.currentTarget.value;
+        var val = this.element.value;
         if( !val.length && e.type=="input" ) { //Allow input to be invalid while typing and coerce when blurred ("change")
             return;
         }
@@ -159,7 +159,7 @@
     }
     
     function onkeydown( e ) {
-        var val = numberOrDefault( e.currentTarget.value, this.min );
+        var val = numberOrDefault( this.element.value, this.min );
         
         switch( e.which ) {
             
