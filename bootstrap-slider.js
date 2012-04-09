@@ -121,14 +121,7 @@
         calculateBox.call( this );
         setValue.call( this, snap( Math.max( Math.min( val, this.max ), this.min ), this.step ) );
     }
-    
-    function onkeydown(e) { //Prevent submits when pressing enter/esc on a manual slider input
-        if( e.which === 13 || e.which === 27 ) {
-            e.preventDefault();
-            e.currentTarget.blur();
-        }
-    }
-    
+  
     function calculateBox() {
         var $slider = $( this.slider ),
             $knob = $( this.slider.firstChild ),
@@ -151,10 +144,38 @@
         if( !val.length && e.type=="input" ) { //Allow input to be invalid while typing and coerce when blurred ("change")
             return;
         }
-        val = numberOrDefault( e.currentTarget.value, this.min );
+        val = numberOrDefault( val, this.min );
         setValue.call( this, snap( Math.max( Math.min( val, this.max ), this.min ), this.step ) );
     }
     
+    function onkeydown( e ) {
+        var val = numberOrDefault( e.currentTarget.value, this.min );
+        
+        switch( e.which ) {
+            
+            case 38: // up
+                e.preventDefault();
+                setValue.call( this, Math.min( this.max, val += this.step ) );
+            
+            break;
+            
+            case 40: //down
+                e.preventDefault();
+                setValue.call( this, Math.max( this.min, val -= this.step ) );
+            break;
+            
+            case 13: //esc or enter
+            case 27:
+                e.preventDefault(); //Prevent submits when pressing enter/esc on a manual slider input
+                e.currentTarget.blur();
+            break;    
+        }
+    }
+    
+    function onmousewheel( e ) {
+        e.preventDefault();
+        
+    }
     
     //Begin the slider drag process
     function onmousedown( e ) {            
