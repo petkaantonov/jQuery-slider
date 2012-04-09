@@ -112,6 +112,7 @@
         
         $( this.element ).bind( {
             "change.slider": $.proxy( onchange, this ),
+            "input.slider": $.proxy( onchange, this ),
             "keydown.slider": $.proxy( onkeydown, this )
         });
         
@@ -146,7 +147,11 @@
     }
     //React to change events on the original input
     function onchange(e) {
-        var val = numberOrDefault( e.currentTarget.value, this.min );
+        var val = e.currentTarget.value;
+        if( !val.length && e.type=="input" ) { //Allow input to be invalid while typing and coerce when blurred ("change")
+            return;
+        }
+        val = numberOrDefault( e.currentTarget.value, this.min );
         setValue.call( this, snap( Math.max( Math.min( val, this.max ), this.min ), this.step ) );
     }
     
