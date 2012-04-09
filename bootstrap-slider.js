@@ -161,6 +161,10 @@
     function onkeydown( e ) {
         var val = numberOrDefault( this.element.value, this.min );
         
+        if( this.isDisabled ) {
+            return;
+        }
+        
         switch( e.which ) {
             
             case 38: // up
@@ -185,6 +189,10 @@
     }
     
     function onmousewheel( e ) {
+    
+        if( this.isDisabled ) {
+            return;
+        }
         
         var evt = e.originalEvent,
             val = numberOrDefault( this.element.value, this.min ),
@@ -285,7 +293,7 @@
 
     function setValue( value ) {
         var offset;
-
+        value = normalize( value );
         this.element.value = this.decimals ? value.toFixed(this.decimals) : value;
        
         if( this.box.isHorizontal ) {
