@@ -72,7 +72,7 @@
    
         destroy: function() {
             $( this.slider ).remove();
-            $( this.element ).unbind( ".slider" ).removeData( "slider" );
+            $( this.element ).unbind( ".slider" ).removeData( "slider-instance" );
         },
 
         constructor: Slider
@@ -107,7 +107,7 @@
             this.decimals = this.step.toString().length - ( decimalIndex + 1 );
         }
                 
-        this.slider = $( this.options.template ).appendTo( $( $( this.element ).attr("data-target") ) ).get( 0 );
+        this.slider = $( this.options.template ).appendTo( this.options.slider ).get( 0 );
         this.disabled( this.element.disabled );
         
         $( this.element ).bind( {
@@ -303,12 +303,12 @@
         return this.filter("input").each( function() {
             
             var $this = $( this ),
-                data = $this.data( "slider" ),
+                data = $this.data( "slider-instance" ),
                 options = typeof option == 'object' && option || {};
                 
             if( !data ) {
                 options = $.extend( {}, $.fn.slider.defaults, $this.data(), options );
-                $this.data( "slider", ( data = new Slider( this, options ) ) );
+                $this.data( "slider-instance", ( data = new Slider( this, options ) ) );
             }
             if( typeof option == 'string' ) {
                 data[option].apply( data, arguments.length > 1 ? [].slice.call( arguments, 1 ) : [] );
@@ -322,12 +322,13 @@
         min: 1,
         max: 100,
         step: 1,
+        slider: "body",
         
         template: '<div class="input-slider"><div class="input-slider-knob"></div></div>'
     };
     
     $( function() {
-        $( "input[data-enhance='slider']" ).slider();
+        $( "input[data-slider]" ).slider();
     });
     
 
