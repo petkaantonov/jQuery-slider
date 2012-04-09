@@ -144,20 +144,8 @@
                                </div>
                         </div>
 
-
                         <div class="control-group">
-                            <label class="control-label"><h4>Number input</h4></label>
-                            <div class="controls">
-                                <div class="slider span2" id="number">
-                                
-                                </div>
-                              <input data-enhance="slider" data-target="#number" class="span1" type="number" data-step="0.1" data-max="10" value="3.2">                              
-                              <span class="help-inline"></span>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label"><h4>Prevent default <small>-slider can be adjusted via the original input only</small></h4></label>
+                            <label class="control-label"><h4>Prevent default <small>-prevent default on the slidestart event/small></h4></label>
                             <div class="controls">
                                 <div class="slider span2" id="prevent-default">
                                 
@@ -166,7 +154,44 @@
                               <span class="help-inline"></span>
                             </div>
                         </div>
-   
+
+                        <div class="control-group">
+                            <label class="control-label"><h4>Hidden input <small>-hide the original input and report the value in some other way</small></h4></label>
+                            <div class="controls">
+                                <div class="slider span2" id="hidden-input">
+                                
+                                </div>
+                              <input data-enhance="slider" id="hidden-input-input" data-target="#hidden-input" class="span1 hide" value="25">                              
+                              <span class="help-inline"></span>
+                            </div>
+                        </div>
+ 
+ 
+                         <div class="control-group">
+                             <label class="control-label"><h4>Datetime input <small>-hide the original input and interpret the numbers as date in custom slide event</small></h4></label>
+                             <div class="controls">
+                                 <div class="slider span2" id="date-input">
+                                 </div>
+                               <input data-enhance="slider" id="date-input-input" data-target="#date-input" class="span1 hide" data-min="1333973713" data-max="1334060125" data-step="900" value="1333977313">                              
+                               <span class="help-inline"></span>
+                             </div>
+                        </div>
+ 
+                         <div class="control-group">
+                             <label class="control-label"><h4>Input inside a scrollable div<small>-just to test that nothing bugs out</small></h4></label>
+                             <div class="controls">
+                                <div style="max-height:200px;overflow-y:scroll;">
+                                    <div style="width:100%;height:180px;"></div>
+                                 <div class="slider vertical" style="height: 130px"; id="inside-scrollable">
+                                 
+                                 </div>
+                                 <br>
+                               <input data-enhance="slider" data-target="#inside-scrollable" class="span1">                              
+                               <span class="help-inline"></span>
+                               </div>
+                             </div>
+                        </div>
+ 
                         <div class="form-actions">
 
                             <button type="submit" class="btn btn-primary" data-loading-text="Saving changes...">Save changes</button>
@@ -196,6 +221,15 @@
         $( "#prevent-default-input").bind( "slidestart", function(e){
             e.preventDefault();
         });
+        
+        $("#hidden-input-input").bind( "slide", function(){
+            $( this ).next().html( "The value is: " + this.value );
+        }).trigger("slide"); //Show the initial value
+        
+        $("#date-input-input").bind( "slide", function(){
+       
+            $( this ).next().html( "The value is: " + ( new Date ( this.value * 1000 ) + "" ) );
+        }).trigger("slide"); //Show the initial value
     </script>
  </body>
 </html>
