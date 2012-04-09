@@ -139,14 +139,17 @@
             height = $slider.height();
             
         this.box = $slider.offset();
+        
+        this.knobBox = {
+            width: $knob.width(),
+            height: $knob.height()
+        };
+        
         this.box.right = width + this.box.left;
         this.box.bottom = height + this.box.top;
         this.box.isHorizontal = width >= height;
         
-        this.knobBox = {
-            width: ($knob.width() / 2 | 0 ) + 2, //Dunno why but pretending the knob is 2px larger settles it better at start and end of sliders
-            height: ($knob.height() / 2 | 0 ) + 2
-        };
+    
     }
     //React to change events on the original input
     function onchange(e) {
@@ -292,15 +295,20 @@
     }
 
     function setValue( value ) {
-        var offset;
+        var offset, progress,
+            span;
+        
         value = normalize( value );
         this.element.value = this.decimals ? value.toFixed(this.decimals) : value;
-       
+        progress = ( value - this.min ) / ( this.max - this.min );
+
         if( this.box.isHorizontal ) {
-            offset = ( ( value - this.min ) / ( this.max - this.min ) * ( this.box.right - this.box.left ) - this.knobBox.width ) + "px";
+            span = this.box.right - this.box.left; //Settle the knob 2 pixels over edges
+            offset =  Math.max( -2, Math.min( progress * span - this.knobBox.width / 2, span - this.knobBox.width + 2) ) + "px";
         }
         else {
-            offset = ( ( value - this.min ) / ( this.max - this.min ) * ( this.box.bottom - this.box.top ) - this.knobBox.height ) + "px";
+            span = this.box.bottom - this.box.top;
+            offset =  Math.max( -2, Math.min( progress * span - this.knobBox.height / 2, span - this.knobBox.height + 2 ) ) + "px";
         }
         
 
