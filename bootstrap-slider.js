@@ -150,11 +150,11 @@
     }
     //React to change events on the original input
     function onchange(e) {
-        var val = this.element.value;
-        if( !val.length && e.type=="input" ) { //Allow input to be invalid while typing and coerce when blurred ("change")
+        var val = numberOrDefault( this.element.value, this.min );
+        if( val === this.min && e.type=="input" ) { //Allow input to be invalid while typing and coerce when blurred ("change")
             return;
         }
-        val = numberOrDefault( val, this.min );
+        
         setValue.call( this, snap( Math.max( Math.min( val, this.max ), this.min ), this.step ) );
     }
     
