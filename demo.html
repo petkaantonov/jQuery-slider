@@ -49,6 +49,15 @@
                     <li>Keyup/keydown while the focus is in original input</li>
                     <li>Manually entering value (automatically validated & snapped)</li>
                 </ul>
+                <h3>Markup</h3>
+                <p>Markup listed below sliders doesn't include the control-group container due to <code>.outerHTML</code> inconsistency issues.</p>
+                
+                <p>Markup is generated with:</p>
+<pre class="prettyprint">
+$( ".control-group" ).each( function(){
+    $(this).after( $( '&lt;pre&gt;', {'class': "prettyprint"} ).text( $.trim( $(this).html() ) ) );
+});
+</pre>
             </div>
         </div>
         <div class="row">
@@ -140,12 +149,23 @@
 </div>
 </div>
 
+<div class="control-group error">
+<div class="span2">
+   <h4>Bootstrap control group classes <small>the slider reacts to the colors as well. Possible classes: <code>.error</code>, <code>.success</code>, <code>.warning</code></small></h4>
+</div>
+<div class="controls">
+    <div class="slider span2" id="colored"></div>
+    <input data-slider="#colored" class="span1">
+    <span class="help-inline"></span>
+</div>
+</div>
+
 <div class="control-group">
 <div class="span2">
    <h4>Multiple in same container <small>the slider automatically uses y axis if height > width. No need to specify yet another option.</small></h4>
 </div>
 <div class="controls">
-    <div class="slider vertical" style="height: 130px"; id="multiple-range"></div>
+    <div class="slider vertical" style="height: 130px;" id="multiple-range"></div>
     <input data-max="100" value="75" class="hide" data-slider="#multiple-range">
     <input data-max="100" value="72" class="hide" data-slider="#multiple-range">
     <input data-max="100" value="69" class="hide" data-slider="#multiple-range">
@@ -240,7 +260,7 @@
 
     <script type="text/javascript">        
         $( ".control-group" ).each( function(){
-            $(this).after( $( '<pre>', {'class': "prettyprint"} ).text( $.trim( this.innerHTML ) ) );
+            $(this).after( $( '<pre>', {'class': "prettyprint"} ).text( $.trim( $(this).html() ) ) );
         });
         
         $( window.prettyPrint );

@@ -167,14 +167,17 @@
   // Style inputs accordingly
   input,
   select,
+  .input-slider,
+  .input-slider-knob,
   textarea {
     color: @textColor;
     border-color: @borderColor;
-    &:focus {
+    &:focus, &.focused {
       border-color: darken(@borderColor, 10%);
       .box-shadow(0 0 6px lighten(@borderColor, 20%));
     }
   }
+  
   // Give a small background color for input-prepend/-append
   .input-prepend .add-on,
   .input-append .add-on {
