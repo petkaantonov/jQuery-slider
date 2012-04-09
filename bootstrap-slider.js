@@ -298,6 +298,8 @@
 
         $( this.slider.firstChild ).css( this.box.isHorizontal ? "left" : "bottom", offset );
     }
+    
+    //jquery plugin
 
     $.fn.slider = function( option ) {
         return this.filter("input").each( function() {
@@ -326,6 +328,8 @@
         
         template: '<div class="input-slider"><div class="input-slider-knob"></div></div>'
     };
+    
+    //data api
     
     $( function() {
         $( "input[data-slider]" ).slider();

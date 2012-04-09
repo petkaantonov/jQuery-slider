@@ -4,8 +4,10 @@
     <meta charset="utf-8">
     <title>Document</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
+    <link href="./css/prettify.css" rel="stylesheet">    
     <link href="./css/bootstrap.css" rel="stylesheet">
+
     <style type="text/css">
         body {
             padding-top: 65px;
@@ -203,11 +205,14 @@
         </div>
     </div>
     <script type="text/javascript" src="./bootstrap-slider.js"></script>
+    <script type="text/javascript" src="./js/prettify.js"></script>
 
     <script type="text/javascript">        
         $( ".control-group" ).each( function(){
             $(this).after( $( '<pre>', {'class': "prettyprint"} ).text( $.trim( this.outerHTML ) ) );
         });
+        
+        $( prettyPrint );
     </script>
  </body>
 </html>
