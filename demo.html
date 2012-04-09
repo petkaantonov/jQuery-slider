@@ -33,7 +33,7 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <span class="brand">Test page</span>
+          <span class="brand">Slider page</span>
           <div class="nav-collapse">
             <ul class="nav">
             </ul>
@@ -47,7 +47,7 @@
             <div class="span12">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend>Nice form</legend>
+                        <legend>Form with sliders</legend>
 
                         <div class="control-group">
     <label class="control-label"><h4>Default range</h4></label>
@@ -132,12 +132,17 @@
 </div>
 
 <div class="control-group">
-    <label class="control-label"><h4>Prevent default <small>-prevent default on the slidestart event/small></h4></label>
+    <label class="control-label"><h4>Prevent default <small>-prevent default on the slidestart event</small></h4></label>
     <div class="controls">
         <div class="slider span2" id="prevent-default"></div>
         <input data-enhance="slider" id="prevent-default-input" data-target="#prevent-default" class="span1" value="25">
         <span class="help-inline"></span>
     </div>
+    <script type="text/javascript">
+        $( "#prevent-default-input").bind( "slidestart", function(e){
+            e.preventDefault();
+        });
+   </script>
 </div>
 
 <div class="control-group">
@@ -147,6 +152,11 @@
         <input data-enhance="slider" id="hidden-input-input" data-target="#hidden-input" class="span1 hide" value="25">
         <span class="help-inline"></span>
     </div>
+    <script type="text/javascript">    
+        $("#hidden-input-input").bind( "slide", function(){
+            $( this ).next().html( "The value is: " + this.value );
+        }).trigger("slide"); //Show the initial value
+    </script>
 </div>
 
 
@@ -157,6 +167,11 @@
         <input data-enhance="slider" id="date-input-input" data-target="#date-input" class="span1 hide" data-min="1333973713" data-max="1334060125" data-step="900" value="1333977313">
         <span class="help-inline"></span>
     </div>
+    <script type="text/javascript">
+        $("#date-input-input").bind( "slide", function(){
+            $( this ).next().html( "The value is: " + ( new Date ( this.value * 1000 ) + "" ) );
+        }).trigger("slide"); //Show the initial value    
+    </script>
 </div>
 
 <div class="control-group">
@@ -189,27 +204,7 @@
     </div>
     <script type="text/javascript" src="./bootstrap-slider.js"></script>
 
-    <script type="text/javascript">
-        $("#volume").bind( "slideend", function(){
-            $( this).next()
-                    .html( "The value was <b>"+this.value+"</b>" )
-                    .stop( true, true )
-                    .show().delay(500).fadeOut( 400 );
-        });
-        
-        $( "#prevent-default-input").bind( "slidestart", function(e){
-            e.preventDefault();
-        });
-        
-        $("#hidden-input-input").bind( "slide", function(){
-            $( this ).next().html( "The value is: " + this.value );
-        }).trigger("slide"); //Show the initial value
-        
-        $("#date-input-input").bind( "slide", function(){
-       
-            $( this ).next().html( "The value is: " + ( new Date ( this.value * 1000 ) + "" ) );
-        }).trigger("slide"); //Show the initial value
-        
+    <script type="text/javascript">        
         $( ".control-group" ).each( function(){
             $(this).after( $( '<pre>', {'class': "prettyprint"} ).text( $.trim( this.outerHTML ) ) );
         });
