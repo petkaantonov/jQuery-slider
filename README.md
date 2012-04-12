@@ -1,0 +1,56 @@
+Slider plugin for jQuery
+
+
+Minimal configuration jQuery plugin with bootstrap style data api.
+
+Can be used separately from bootstrap if you make your own CSS.
+
+Usage
+-----
+
+The slider can only be called on input elements, this helps keeping
+the api size to minimum. 
+
+	$('input').slider(options)
+	
+Options
+-------
+
+* min - the minimum value, default 1
+* max - the maximum value, default 100
+* step - the step size, default 1. Must be > 0
+
+Methods
+-------
+
+__.slider("destroy")__
+Destroy the slider enhancement from an input element
+
+	$("#price").slider("destroy");
+	
+__.slider("disabled", true|false)__
+Sets the disabled state of the slider as well as the input element
+
+	$("#price").slider("disabled",true);
+	
+Events
+------
+
+* slidestart - fired before dragging the slider has started. Call `preventDefault()` on the event object to prevent sliding
+* slide - fired constantly as the slider is being dragged
+* slideend - fired before dragging the slider ends
+
+Markup/Data-API
+--------
+
+You can use the slider plugin without extra javascript by specifying data attributes on the input element:
+
+	<div id="target"></div>
+	<input data-slider="#target" data-min="1" data-max="100" data-step="1">
+	
+The element only needs a `data-slider` attribute for it to be picked up. The value is used as a jQuery selector to find the element where the slider will be rendered. Note dynamically created elements need to be called manually with js.
+
+The disabled attribute of an input is automatically used to disable a slider. A slider will automatically
+be vertically oriented if its dimensions suggest so (height > width).
+
+See demo.html for better overview and tips for more advanced use.
