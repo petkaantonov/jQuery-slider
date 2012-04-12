@@ -84,12 +84,13 @@
         var val,
             decimalIndex;
             
+        //The options are initially most likely strings because they are read from the element attributes
         this.step = +this.options.step;
-        
         this.min = +this.options.min;
         this.max = +this.options.max;
         
-        if( !( this.step > 0 ) ) {
+        //Sanitize.. why not
+        if( !this.step || this.step < 0 ) ) {
             this.step = 1;
         }
         
@@ -101,6 +102,8 @@
             this.max += 1;
         }
         val = numberOrDefault( this.element.value, this.min );
+        
+        //Determine the number of decimal precision required by looking at the precision of step size
         decimalIndex = this.step.toString().indexOf(".");
         
         if( !!~decimalIndex ) {
@@ -109,7 +112,7 @@
                 
         this.slider = $( this.options.template ).appendTo( this.options.slider ).get( 0 );
         this.disabled( this.element.disabled );
-        
+                
         $( this.element ).bind( {
             "change.slider": $.proxy( onchange, this ),
             "input.slider": $.proxy( onchange, this ),
@@ -124,11 +127,13 @@
             "DOMMouseScroll.slider": $.proxy( onmousewheel, this )
         }); 
         
-        if( "step" in this.element ) {
-            this.element.step = this.step;       
+        if( "step" in this.element ) { //Number inputs have a step property
+            this.element.step = this.step;
         }
 
-        calculateBox.call( this );
+        
+        calculateBox.call( this );  //Need to calculate some coordinates before we can set the initial slider position
+        calculateDragStartOffset.call( this, {});
         setValue.call( this, snap( Math.max( Math.min( val, this.max ), this.min ), this.step ) );
     }
   
@@ -227,7 +232,7 @@
             delta = -1 * normalize( evt.detail / 3 );
         }
         
-        if( delta ) {
+        if( delta != null ) {
             if( delta > 0 ) {
                 setValue.call( this, Math.min( this.max, val += this.step ) );          
             }
@@ -317,12 +322,6 @@
         var offset, progress,
             span;
             
-        if( typeof this.dragOffset == "undefined" ) {
-            calculateBox.call( this );
-            calculateDragStartOffset.call( this, {});
-            
-        }
-        
         value = normalize( value );
         this.element.value = this.decimals ? value.toFixed(this.decimals) : value;
         progress = ( value - this.min ) / ( this.max - this.min );
