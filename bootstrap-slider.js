@@ -90,7 +90,7 @@
         this.max = +this.options.max;
         
         //Sanitize.. why not
-        if( !this.step || this.step < 0 ) ) {
+        if( !this.step || this.step < 0 ) {
             this.step = 1;
         }
         
