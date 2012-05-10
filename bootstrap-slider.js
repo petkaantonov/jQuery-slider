@@ -1,4 +1,14 @@
 !function ( $, window, document, undefined ) {
+
+    //Store possible hooks
+    var disabledPropHooks = $.propHooks.disabled,
+        disabledAttrHooks = $.attrHooks.disabled,
+        textValHooks = $.valHooks.text,
+        disabledPropSetter = disabledPropHooks && disabledPropHooks.set,
+        disabledAttrSetter = disabledAttrHooks && disabledAttrHooks.set,
+        textValSetter = textValHooks && textValHooks.set;
+
+
     //Helpers
     
     function preventDefault(e) {
@@ -15,7 +25,7 @@
     }
 
     function normalize( value ) {
-        return Math.round( value * 100000000 ) / 100000000;
+        return ( Math.round( value * 100000000 ) / 100000000 ) || 0;
     }
 
     function snap( value, step ) {
@@ -59,16 +69,8 @@
     //Public methods
     Slider.prototype = {
 
-        disabled: function( val ) {
-            val = !!val;
-            this.isDisabled = val;
-            $( this.slider )[ val ? "addClass" : "removeClass" ]( "disabled" );
-            this.element.disabled = val;
-            
-            if( !val ) {
-                unbindmousemove.call( this );
-            }
-        },
+        //Deprecated
+        disabled: setDisabled,
    
         destroy: function() {
             $( this.slider ).remove();
@@ -79,7 +81,7 @@
     };
     
     //Private methods
-    
+        
     function init() {
         var val,
             decimalIndex;
@@ -322,7 +324,7 @@
         var offset, progress,
             span;
             
-        value = normalize( value );
+        value = Math.max( Math.min( normalize( value ), this.max ), this.min );
         this.element.value = this.decimals ? value.toFixed(this.decimals) : value;
         progress = ( value - this.min ) / ( this.max - this.min );
 
@@ -338,6 +340,18 @@
 
         $( this.slider.firstChild ).css( this.box.isHorizontal ? "left" : "bottom", offset );
     }
+
+    function setDisabled( val ) {
+        val = !!val;
+        this.isDisabled = val;
+        $( this.slider )[ val ? "addClass" : "removeClass" ]( "disabled" );
+        this.element.disabled = val;
+
+        if( !val ) {
+            unbindmousemove.call( this );
+        }    
+    }
+
     
     //jquery plugin
 
@@ -357,6 +371,31 @@
             }
         });
     };
+
+    //TODO refactor repetitivity
+    function sliderTextValHook( elem, value ) {
+            var data = jQuery.data( elem, "slider-instance" );
+            if( data ) {
+                setValue.call( data, value );
+                return true;
+            }   
+    }
+
+    function sliderDisabledPropHook( elem, value, name ) {
+            var data = jQuery.data( elem, "slider-instance" );
+            if( data ) {
+                setDisabled.call( data, value );
+                return true;
+            }   
+    }
+    
+    function sliderDisabledAttrHook( elem, value, name ) {
+            var data = jQuery.data( elem, "slider-instance" );
+            if( data ) {
+                setDisabled.call( data, value );
+                return true;
+            }  
+    }
     
     $.fn.slider.Constructor = Slider;
     
@@ -368,6 +407,51 @@
         
         template: '<div class="input-slider"><div class="input-slider-knob"></div></div>'
     };
+    
+    /* set up hooks */
+    //TODO refactor repetitivity    
+    $.valHooks.text = $.extend( textValHooks || {}, {
+        set: function() {
+            if( textValSetter ) {
+                return function( elem, value, name ) {
+                    textValSetter( elem, value, name );
+                    return sliderTextValHook( elem, value, name );
+                }
+            }
+            else {
+                return sliderTextValHook;
+            }
+        }()
+    });
+    
+    $.propHooks.disabled = $.extend( disabledPropHooks || {}, {
+        set: function() {
+            if( disabledPropSetter ) {
+                return function( elem, value, name ) {
+                    disabledPropSetter( elem, value, name );
+                    return sliderDisabledPropHook( elem, value, name );
+                }
+            }
+            else {
+                return sliderDisabledPropHook;
+            }
+        }()
+    });
+
+    $.attrHooks.disabled = $.extend( disabledAttrHooks || {}, {
+        set: function() {
+            if( disabledAttrSetter ) {
+                return function( elem, value, name ) {
+                    disabledAttrSetter( elem, value, name );
+                    return sliderDisabledAttrHook( elem, value, name );
+                }
+            }
+            else {
+                return sliderDisabledAttrHook;
+            }
+        }()
+    });    
+
     
     //data api
     
