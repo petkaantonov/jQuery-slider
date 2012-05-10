@@ -118,7 +118,6 @@
                 
         $( this.element ).bind( {
             "change.slider": $.proxy( onchange, this ),
-            "input.slider": $.proxy( onchange, this ),
             "keydown.slider": $.proxy( onkeydown, this ),
             "mousewheel.slider": $.proxy( onmousewheel, this ),
             "DOMMouseScroll.slider": $.proxy( onmousewheel, this )
