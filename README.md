@@ -5,7 +5,14 @@ Minimal configuration jQuery plugin with bootstrap style data api.
 
 2kb gzipped and minified.
 
-Can be used separately from bootstrap if you make your own CSS.
+Integrating with bootstrap
+--------------------------
+
+Add `@import "slider.less";` to your `bootstrap.less` file. Also add this variable in your `variables.less` file:
+
+	@borderColor: #C7C7C7;
+	
+Compile as normal.
 
 Usage
 -----
