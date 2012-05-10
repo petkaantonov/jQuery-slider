@@ -4,6 +4,7 @@
 }
 .slider .input-slider {
 	display:inline-block;
+	.ie7-inline-block();
 	position:relative;
 	border-width:1px;
 	.border-radius(6px);
@@ -21,6 +22,7 @@
 	width:8px;
 	margin:0px 8px 0px 8px;
 	#gradient>.horizontal(@btnBackgroundHighlight,@btnBackground);
+	*filter: none; /* IE7 fix */
 }
 .input-slider-knob {
 	position:absolute;
