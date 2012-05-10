@@ -4,10 +4,11 @@
     var disabledPropHooks = $.propHooks.disabled,
         disabledAttrHooks = $.attrHooks.disabled,
         textValHooks = $.valHooks.text,
-        disabledPropSetter = disabledPropHooks && disabledPropHooks.set,
-        disabledAttrSetter = disabledAttrHooks && disabledAttrHooks.set,
-        textValSetter = textValHooks && textValHooks.set;
-
+        
+        disabledPropSetter = disabledPropHooks && disabledPropHooks.set || $.noop,
+        disabledAttrSetter = disabledAttrHooks && disabledAttrHooks.set || $.noop,
+        textValSetter = textValHooks && textValHooks.set || $.noop;
+    
 
     //Helpers
     
@@ -372,31 +373,6 @@
         });
     };
 
-    //TODO refactor repetitivity
-    function sliderTextValHook( elem, value ) {
-            var data = jQuery.data( elem, "slider-instance" );
-            if( data ) {
-                setValue.call( data, value );
-                return true;
-            }   
-    }
-
-    function sliderDisabledPropHook( elem, value, name ) {
-            var data = jQuery.data( elem, "slider-instance" );
-            if( data ) {
-                setDisabled.call( data, value );
-                return true;
-            }   
-    }
-    
-    function sliderDisabledAttrHook( elem, value, name ) {
-            var data = jQuery.data( elem, "slider-instance" );
-            if( data ) {
-                setDisabled.call( data, value );
-                return true;
-            }  
-    }
-    
     $.fn.slider.Constructor = Slider;
     
     $.fn.slider.defaults = {
@@ -409,47 +385,28 @@
     };
     
     /* set up hooks */
-    //TODO refactor repetitivity    
+    
+    function makeHookSetter( hookSetter, originalHookSetter ) {
+        return function( elem, value, name ) {
+            var data = jQuery.data( elem, "slider-instance" );
+            if( data ) {
+                hookSetter.call( data, value );
+                return true;
+            }
+            return originalHookSetter.call( this, elem, value, name );        
+        };
+    }
+        
     $.valHooks.text = $.extend( textValHooks || {}, {
-        set: function() {
-            if( textValSetter ) {
-                return function( elem, value, name ) {
-                    textValSetter( elem, value, name );
-                    return sliderTextValHook( elem, value, name );
-                }
-            }
-            else {
-                return sliderTextValHook;
-            }
-        }()
+        set: makeHookSetter( setValue, textValSetter )
     });
     
     $.propHooks.disabled = $.extend( disabledPropHooks || {}, {
-        set: function() {
-            if( disabledPropSetter ) {
-                return function( elem, value, name ) {
-                    disabledPropSetter( elem, value, name );
-                    return sliderDisabledPropHook( elem, value, name );
-                }
-            }
-            else {
-                return sliderDisabledPropHook;
-            }
-        }()
+        set: makeHookSetter( setDisabled, disabledPropSetter )
     });
 
     $.attrHooks.disabled = $.extend( disabledAttrHooks || {}, {
-        set: function() {
-            if( disabledAttrSetter ) {
-                return function( elem, value, name ) {
-                    disabledAttrSetter( elem, value, name );
-                    return sliderDisabledAttrHook( elem, value, name );
-                }
-            }
-            else {
-                return sliderDisabledAttrHook;
-            }
-        }()
+        set: makeHookSetter( setDisabled, disabledAttrSetter )
     });    
 
     
