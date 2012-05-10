@@ -28,10 +28,10 @@ Destroy the slider enhancement from an input element
 
 	$("#price").slider("destroy");
 	
-__.slider("disabled", true|false)__
-<span style="color:red;">*Deprecated*</span> <del>Sets the disabled state of the slider as well as the input element</del>
+*Deprecated*  <del>__.slider("disabled", true|false)__
+Sets the disabled state of the slider as well as the input element</del>
 
-	$("#price").slider("disabled",true);
+	<del>$("#price").slider("disabled",true);</del>
 	
 This method has been deprecated, simply use `.prop` on the original `input` element
 
