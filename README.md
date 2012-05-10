@@ -3,6 +3,8 @@ Slider plugin for jQuery
 
 Minimal configuration jQuery plugin with bootstrap style data api.
 
+2kb gzipped and minified.
+
 Can be used separately from bootstrap if you make your own CSS.
 
 Usage

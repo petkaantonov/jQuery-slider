@@ -379,8 +379,9 @@
         min: 1,
         max: 100,
         step: 1,
-        slider: "body",
         
+        
+        slider: "body",
         template: '<div class="input-slider"><div class="input-slider-knob"></div></div>'
     };
     
