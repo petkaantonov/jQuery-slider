@@ -8,10 +8,8 @@ Minimal configuration jQuery plugin with bootstrap style data api.
 Integrating with bootstrap
 --------------------------
 
-Add `@import "slider.less";` to your `bootstrap.less` file. Also add this variable in your `variables.less` file:
+Add `@import "slider.less";` to your `bootstrap.less` file. 
 
-	@borderColor: #C7C7C7;
-	
 Compile as normal.
 
 Usage
