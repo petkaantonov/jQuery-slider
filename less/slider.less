@@ -52,14 +52,8 @@
 	@transition:border linear .2s,box-shadow linear .2s;
 	.transition(@transition);
 }
-.input-slider.focused {
-	border-color:rgba(82,168,236,.8);
-	@shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(82,168,236,.6);
-	.box-shadow(@shadow);
-	outline:0;
-	outline:thin dotted \9;
-}
-.input-slider,.input-slider-knob {
+
+.input-slider-knob {
 	color:@textColor;
 	border-color:@borderColor;
 	&:focus,&.focused {
@@ -68,21 +62,45 @@
 	}
 }
 
-.control-group.error .input-slider, .control-group.error .input-slider-knob {
-	border-color: @errorText;
+.input-slider.focused {
+	border-color:rgba(82,168,236,.8);
+	@shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(82,168,236,.6);
+	.box-shadow(@shadow);
+	outline:0;
+	outline:thin dotted \9;
 }
 
-.control-group.warning .input-slider, .control-group.warning .input-slider-knob {
-	border-color: @warningText;
+.control-group.error {
+	.sliderState(@errorBorder);
 }
 
-.control-group.success .input-slider, .control-group.success .input-slider-knob {
-	border-color: @successText;
+.control-group.warning {
+	.sliderState(@warningBorder);
 }
 
-.control-group.info .input-slider, .control-group.info .input-slider-knob {
-	border-color: @infoText;
+.control-group.success {
+	.sliderState(@successBorder);
 }
+
+.control-group.info {
+	.sliderState(@infoBorder);
+}
+
+.sliderState(@borderColor: #ccc) {
+
+  .input-slider {
+    border-color: darken(@borderColor, 15%);
+    &:focus, &.focused {
+      border-color: darken(@borderColor, 35%);
+      .box-shadow(0 0 6px lighten(@borderColor, 20%));
+    }
+  }
+  
+  .input-slider-knob {
+  	border-color: darken(@borderColor, 15%);
+  }
+}
+
 
 .add-on .input-slider {
 	top: -3px;
