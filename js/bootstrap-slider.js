@@ -91,7 +91,7 @@
         this.step = +this.options.step;
         this.min = +this.options.min;
         this.max = +this.options.max;
-		this.isRtl = this.options.rtl === undefined ? $(this.element).css('direction') == 'rtl' || 1 : this.options.rtl;
+        this.isRtl = $(this.element).css('direction').toLowerCase() === 'rtl' || !!this.options.rtl;
 
         //Sanitize.. why not
         if( !this.step || this.step < 0 ) {
@@ -382,6 +382,7 @@
         min: 1,
         max: 100,
         step: 1,
+        rtl: false,
         
         
         slider: "body",

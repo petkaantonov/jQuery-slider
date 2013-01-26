@@ -26,7 +26,7 @@ Options
 * min - the minimum value, default 1
 * max - the maximum value, default 100
 * step - the step size, default 1. Must be > 0
-* rtl - when rtl is true, maximum value is on right of slider, by default guessed from `rtl` css value of input.
+* rtl - specify right-to-left direction on the slider. The default is left-to-right. Only has an effect on horizontally oriented sliders. Automatically picked up from the active CSS writing direction on the element.
 
 Methods
 -------
