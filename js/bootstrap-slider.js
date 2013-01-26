@@ -91,7 +91,8 @@
         this.step = +this.options.step;
         this.min = +this.options.min;
         this.max = +this.options.max;
-        
+		this.isRtl = this.options.rtl === undefined ? $(this.element).css('direction') == 'rtl' || 1 : this.options.rtl;
+
         //Sanitize.. why not
         if( !this.step || this.step < 0 ) {
             this.step = 1;
@@ -302,6 +303,9 @@
         if( box.isHorizontal ) {
             pxOffset = ( Math.max( Math.min( e.pageX, box.right ), box.left ) - box.left );
             position = pxOffset / ( box.right - box.left );
+            if (this.isRtl) {
+                position = 1 - position;
+            }
         }
         else {
             pxOffset = ( Math.max( Math.min( e.pageY, box.bottom ), box.top ) - box.top );
@@ -338,7 +342,7 @@
         }
         
 
-        $( this.slider.firstChild ).css( this.box.isHorizontal ? "left" : "bottom", offset );
+        $( this.slider.firstChild ).css( this.box.isHorizontal ? (this.isRtl?"right":"left") : "bottom", offset );
     }
 
     function setDisabled( val ) {
