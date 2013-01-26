@@ -114,6 +114,9 @@
         }
                 
         this.slider = $( this.options.template ).appendTo( this.options.slider ).get( 0 );
+        if (this.options.focusable) {
+            this.slider.tabIndex = 0;
+        }
         this.disabled( this.element.disabled );
                 
         $( this.element ).bind( {
@@ -126,6 +129,7 @@
         $( this.slider ).bind( {
             "mousedown.slider": $.proxy( onmousedown, this ),
             "mousewheel.slider": $.proxy( onmousewheel, this ),
+            "keydown.slider": $.proxy( onkeydown, this ),
             "DOMMouseScroll.slider": $.proxy( onmousewheel, this )
         }); 
         
@@ -190,7 +194,7 @@
         if( this.isDisabled ) {
             return;
         }
-        
+
         switch( e.which ) {
             
             case 38: // up
@@ -205,7 +209,16 @@
                 setValue.call( this, Math.max( this.min, val -= this.step ) );
                 $( this.element ).trigger( "slide" );
             break;
-            
+
+            case 37: //left
+            case 39: //right
+                if (e.currentTarget == this.slider) {  // catch right/left only on slider, not input
+                    e.preventDefault();
+                    setValue.call( this, Math.max( this.min, val += (e.which - 38) * this.step ) );
+                    $( this.element ).trigger( "slide" );
+                }
+                break;
+
             case 13: //esc or enter
             case 27:
                 e.preventDefault(); //Prevent submits when pressing enter/esc on a manual slider input
@@ -378,6 +391,7 @@
         min: 1,
         max: 100,
         step: 1,
+        focusable: true,
         
         
         slider: "body",
