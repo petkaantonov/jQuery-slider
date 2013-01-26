@@ -26,6 +26,7 @@ Options
 * min - the minimum value, default 1
 * max - the maximum value, default 100
 * step - the step size, default 1. Must be > 0
+* rtl - when rtl is true, maximum value is on right of slider, by default guessed from `rtl` css value of input.
 
 Methods
 -------
