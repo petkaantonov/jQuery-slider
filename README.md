@@ -3,7 +3,7 @@ Slider plugin for jQuery
 
 Minimal configuration jQuery plugin with bootstrap style data api.
 
-2kb gzipped and minified.
+3kb gzipped and minified.
 
 Integrating with bootstrap
 --------------------------
@@ -37,14 +37,19 @@ Destroy the slider enhancement from an input element
 
 	$("#price").slider("destroy");
 	
-*Deprecated*  <del>__.slider("disabled", true|false)__
-Sets the disabled state of the slider as well as the input element</del><del>
+You can also just trigger the event `"destroy"` on the target element
 
-	$("#price").slider("disabled",true);
+	$("#price").trigger("destroy")
 	
-</del>This method has been deprecated, simply use `.prop` on the original `input` element
+This way you don't have to remember which plugins to destroy when you remove the element. You need
+to destroy the plugin when you remove the original input element, otherwise memory will be leaked.
+	
+*Deprecated*  <del>__.slider("disabled", true|false)__
+Sets the disabled state of the slider as well as the input element</del>
 
-	$("#price").prop( "disabled", true);
+This method has been deprecated, simply use `.prop` on the original `input` element
+
+	$("#price").prop("disabled", true);
 	
 Events
 ------
@@ -61,9 +66,14 @@ You can use the slider plugin without extra javascript by specifying data attrib
 	<div id="target"></div>
 	<input data-slider="#target" data-min="1" data-max="100" data-step="1">
 	
-The element only needs a `data-slider` attribute for it to be picked up. The value is used as a jQuery selector to find the element where the slider will be rendered. Note dynamically created elements need to be called manually with js.
+The element only needs a `data-slider` attribute for it to be picked up. The value is used as a jQuery selector to find the element where the slider will be rendered.
+
+**Note**: dynamically created elements need to be called manually with js. You may also call `$.fn.slider.refresh()` at any point to instantiate any
+uninitialized `data-slider` inputs. It is automatically called once on DOM ready event which makes the data API work.
 
 The disabled attribute of an input is automatically used to disable a slider. A slider will automatically
 be vertically oriented if its dimensions suggest so (height > width).
+
+
 
 See demo.html for better overview and tips for more advanced use.
