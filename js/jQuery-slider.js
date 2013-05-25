@@ -136,13 +136,25 @@
         Slider.prototype = {
 
             //Deprecated
-            disabled: setDisabled,
+            disabled: function( disabled ) {
+               this._setDisabled( !!disabled );
+            },
 
             destroy: function() {
                 $( this.slider ).remove();
                 $( this.element )
                     .off( ".rangeslider" )
                     .removeData( INSTANCE_KEY );
+            },
+            
+            _setDisabled: function( disabled ) {
+                this.isDisabled = disabled;
+                $( this.slider )[ disabled ? "addClass" : "removeClass" ]( "disabled" );
+                this.element.disabled = disabled;
+
+                if( !disabled ) {
+                    unbindMousemove.call( this );
+                }
             },
 
             constructor: Slider
@@ -182,9 +194,11 @@
             this.slider = $( this.options.template ).appendTo( this.options.slider ).get( 0 );
 
             if ( this.options.focusable ) {
-                this.slider.tabIndex = this.slider.tabIndex > -1 ? this.slider.tabIndex : 0;
+                var tabIndex = $( this.element ).prop( "tabIndex" );
+                this.slider.tabIndex = tabIndex > 0 ? tabIndex : 0;
             }
-            this.disabled( this.element.disabled );
+            
+            this._setDisabled( this.element.disabled );
 
             $( this.element ).on( {
                 "change.rangeslider": $.proxy( onchange, this ),
@@ -194,6 +208,10 @@
             });
 
             $( this.slider ).on( {
+                "focusin.rangeslider": $.proxy( focused, this ),
+                "focus.rangeslider": $.proxy( focused, this ),
+                "focusout.rangeslider": $.proxy( blurred, this ),
+                "blur.rangeslider": $.proxy( blurred, this ),
                 "mousedown.rangeslider": $.proxy( onmousedown, this ),
                 "mousewheel.rangeslider": $.proxy( onmousewheel, this ),
                 "keydown.rangeslider": $.proxy( onkeydown, this ),
@@ -209,7 +227,18 @@
             calculateDragStartOffset.call( this, {});
             setValue.call( this, snap( Math.max( Math.min( val, this.max ), this.min ), this.step ) );
 
-            this._elem.on( "destroy.rangeslider", $.proxy( this.destroy, this ) );
+            $( this.element ).on( "destroy.rangeslider", $.proxy( this.destroy, this ) );
+        }
+        
+        function blurred() {
+            $( this.slider ).removeClass( "focused" );
+        }
+        
+        function focused() {
+            if( this.isDisabled ) {
+                return;
+            }
+            $( this.slider ).addClass( "focused" );
         }
 
         function calculateBox() {
@@ -282,6 +311,7 @@
                 case 37: //left
                 case 39: //right
                     if (e.currentTarget == this.slider) {  // catch right/left only on slider, not input
+                        
                         e.preventDefault();
                         setValue.call( this, Math.max( this.min, val += (e.which - 38) * this.step ) );
                         $( this.element ).trigger( "slide" );
@@ -439,14 +469,7 @@
             if( !instance ) {
                 return;
             }
-            value = !!value;
-            instance.isDisabled = value;
-            $( instance.slider )[ value ? "addClass" : "removeClass" ]( "disabled" );
-            instance.element.disabled = value;
-
-            if( !value ) {
-                unbindMousemove.call( instance );
-            }
+            instance._setDisabled( !!value );
             return true;
         }
         
@@ -458,14 +481,16 @@
     })();
 
     $.fn.slider = function( option ) {
-        var options = typeof option == 'object' && option || {};
+        
         return this.filter( "input" ).each( function() {
             
             var $this = $( this ),
-                data = $this.data( INSTANCE_KEY );
+                data = $this.data( INSTANCE_KEY ),
+                options = typeof option == 'object' && option || {};
                 
             if( !data ) {
                 options = $.extend( {}, $.fn.slider.defaults, $this.data(), options );
+                console.log(options);
                 $this.data( INSTANCE_KEY, ( data = new Slider( this, options ) ) );
             }
             if( typeof option == 'string' && option.charAt(0) !== "_" && data[option].apply ) {
@@ -492,4 +517,4 @@
     
     $( $.fn.slider.refresh );
     
-})( jQuery, window, document )();
+})( this.jQuery, this, this.document );
