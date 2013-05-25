@@ -161,16 +161,13 @@
         };
 
         function init() {
-            var val,
-                decimalIndex;
-
             //The options are initially most likely strings because they are read from the element attributes
             this.step = +this.options.step;
             this.min = +this.options.min;
             this.max = +this.options.max;
             this.isRtl = $(this.element).css('direction').toLowerCase() === 'rtl' || !!this.options.rtl;
 
-            //Sanitize.. why not
+
             if( !this.step || this.step < 0 ) {
                 this.step = 1;
             }
@@ -182,10 +179,10 @@
             if( this.min === this.max ) {
                 this.max += 1;
             }
-            val = numberOrDefault( this.element.value, this.min );
+            var val = numberOrDefault( this.element.value, this.min );
 
             //Determine the number of decimal precision required by looking at the precision of step size
-            decimalIndex = this.step.toString().indexOf(".");
+            var decimalIndex = this.step.toString().indexOf(".");
 
             if( !!~decimalIndex ) {
                 this.decimals = this.step.toString().length - ( decimalIndex + 1 );
@@ -490,7 +487,6 @@
                 
             if( !data ) {
                 options = $.extend( {}, $.fn.slider.defaults, $this.data(), options );
-                console.log(options);
                 $this.data( INSTANCE_KEY, ( data = new Slider( this, options ) ) );
             }
             if( typeof option == 'string' && option.charAt(0) !== "_" && data[option].apply ) {
