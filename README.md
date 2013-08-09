@@ -83,6 +83,11 @@ See [demo.html](http://petkaantonov.github.io/jQuery-slider/demo.html) for bette
 Building
 ----------
 
+Building requires [Closure Compiler](http://dl.google.com/closure-compiler/compiler-latest.zip) to be placed
+one directory up from the project in `closure_compiler` directory.
+
+The setting is in `Gruntfile.js`, expressed as `closurePath: '../closure_compiler'`
+
 Clone or download the repository, and while in the project root, run:
 
     npm install
