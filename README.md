@@ -5,6 +5,8 @@ Minimal configuration jQuery plugin with bootstrap style data api.
 
 3kb gzipped and minified.
 
+[demo.html](http://petkaantonov.github.io/jQuery-slider/demo.html)
+
 Integrating with bootstrap
 --------------------------
 
@@ -76,7 +78,7 @@ be vertically oriented if its dimensions suggest so (height > width).
 
 
 
-See demo.html for better overview and tips for more advanced use.
+See [demo.html](http://petkaantonov.github.io/jQuery-slider/demo.html) for better overview and tips for more advanced use.
 
 Building
 ----------
