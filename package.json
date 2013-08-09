@@ -1,0 +1,9 @@
+{
+  "name": "jQuery-slider",
+  "version": "0.2.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.5.4",
+    "grunt-closure-compiler": "0.0.18"
+  }
+}

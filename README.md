@@ -18,8 +18,8 @@ Usage
 The slider can only be called on input elements, this helps keeping
 the api size to minimum. 
 
-	$('input').slider(options)
-	
+    $('input').slider(options)
+    
 Options
 -------
 
@@ -35,22 +35,22 @@ Methods
 __.slider("destroy")__
 Destroy the slider enhancement from an input element
 
-	$("#price").slider("destroy");
-	
+    $("#price").slider("destroy");
+    
 You can also just trigger the event `"destroy"` on the target element
 
-	$("#price").trigger("destroy")
-	
+    $("#price").trigger("destroy")
+    
 This way you don't have to remember which plugins to destroy when you remove the element. You need
 to destroy the plugin when you remove the original input element, otherwise memory will be leaked.
-	
+    
 *Deprecated*  <del>__.slider("disabled", true|false)__
 Sets the disabled state of the slider as well as the input element</del>
 
 This method has been deprecated, simply use `.prop` on the original `input` element
 
-	$("#price").prop("disabled", true);
-	
+    $("#price").prop("disabled", true);
+    
 Events
 ------
 
@@ -63,9 +63,9 @@ Markup/Data-API
 
 You can use the slider plugin without extra javascript by specifying data attributes on the input element:
 
-	<div id="target"></div>
-	<input data-slider="#target" data-min="1" data-max="100" data-step="1">
-	
+    <div id="target"></div>
+    <input data-slider="#target" data-min="1" data-max="100" data-step="1">
+    
 The element only needs a `data-slider` attribute for it to be picked up. The value is used as a jQuery selector to find the element where the slider will be rendered.
 
 **Note**: dynamically created elements need to be called manually with js. You may also call `$.fn.slider.refresh()` at any point to instantiate any
@@ -77,3 +77,13 @@ be vertically oriented if its dimensions suggest so (height > width).
 
 
 See demo.html for better overview and tips for more advanced use.
+
+Building
+----------
+
+Clone or download the repository, and while in the project root, run:
+
+    npm install
+    grunt
+    
+Builds will appear in the `/js` folder. The source code cannot be ran directly without building.

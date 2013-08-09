@@ -23,7 +23,7 @@
 (function ( $, window, document, undefined ) {
     "use strict";
 
-    var seal = false ||
+    var seal = %_PRODUCTION ||
         typeof Object.seal !== "function"
             ? function( obj ) { return obj; }
             : Object.seal;
