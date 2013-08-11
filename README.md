@@ -17,7 +17,7 @@ Compile as normal.
 Usage
 -----
 
-The slider can only be called on input elements, this helps keeping
+The slider can only be called on input elements of `type="text"`, this helps keeping
 the api size to minimum. 
 
     $('input').slider(options)

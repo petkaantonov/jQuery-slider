@@ -579,8 +579,12 @@
     })();
 
     $.fn.slider = function( option ) {
-
+        var args = [].slice.call( arguments, 1 );
         return this.filter( "input" ).each( function() {
+
+            if( !( /^(?:text)$/i.test( this.type ) ) ) {
+                return;
+            }
 
             var $this = $( this ),
                 instance = $this.data( INSTANCE_KEY ),
@@ -599,11 +603,7 @@
             if( typeof option === "string" &&
                 option.charAt(0) !== "_" &&
                 typeof instance[option] === "function" ) {
-                instance[option].apply( instance,
-                    arguments.length > 1
-                    ? [].slice.call( arguments, 1 )
-                    : []
-                );
+                instance[option].apply( instance, args );
             }
         });
     };
