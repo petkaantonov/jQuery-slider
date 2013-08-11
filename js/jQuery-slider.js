@@ -577,8 +577,8 @@
 
         return Slider;
     })();
-
-    $.fn.slider = function( option ) {
+    var plugin;
+    plugin = $.fn.slider = function( option ) {
         var args = [].slice.call( arguments, 1 );
         return this.filter( "input" ).each( function() {
 
@@ -593,7 +593,7 @@
             if( !instance ) {
                 options = $.extend(
                     {},
-                    $.fn.slider.defaults,
+                    plugin.defaults,
                     $this.data(),
                     options
                 );
@@ -608,9 +608,9 @@
         });
     };
 
-    $.fn.slider.Constructor = Slider;
+    plugin.Constructor = Slider;
 
-    $.fn.slider.defaults = {
+    plugin.defaults = {
         min: 1,
         max: 100,
         step: 1,
@@ -622,10 +622,14 @@
             "</div>"
     };
 
-    $.fn.slider.refresh = function() {
+    plugin.refresh = function() {
         $( "input[data-slider]" ).slider();
     };
 
-    $( $.fn.slider.refresh );
+    $( plugin.refresh );
+
+    $.ajaxPrefilter( function( o, oo, jqxhr ) {
+        (jqxhr.complete || jqxhr.always)( plugin.refresh );
+    });
 
 })( this.jQuery, this, this.document );
