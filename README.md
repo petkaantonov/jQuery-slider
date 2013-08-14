@@ -88,9 +88,16 @@ You can use the slider plugin without extra javascript by specifying data attrib
     <input data-slider="#target" data-min="1" data-max="100" data-step="1">
     
 The element only needs a `data-slider` attribute for it to be picked up. The value is used as a jQuery selector to find the element where the slider will be rendered.
+You may also leave selector out, in this case the slider element will be placed before the input element like so:
 
+    <div>
+        <!-- Slider container will be placed here with default settings -->
+        <input data-slider>
+    </div>
+    
 **Note**: dynamically created elements need to be called manually with js. You may also call `$.fn.slider.refresh()` at any point to instantiate any
-uninitialized `data-slider` inputs. It is automatically called once on DOM ready event which makes the data API work.
+uninitialized `data-slider` inputs. It is automatically called once on DOM ready event. The plugin is also automatically refreshed
+after any AJAX request completes.
 
 The disabled attribute of an input is automatically used to disable a slider. A slider will automatically
 be vertically oriented if its dimensions suggest so (height > width).
