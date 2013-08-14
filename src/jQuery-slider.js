@@ -34,6 +34,11 @@
     var isFinite = window.isFinite;
     var fMax = function( a, b ){ return Math.max( a, b ); };
     var fMin = function( a, b ){ return Math.min( a, b ); };
+    var fAbs = function( a ){ return Math.abs( a ); };
+
+    var MIN_DECIMALS = 0;
+    var MAX_DECIMALS = 8;
+    var FLOAT_PRECISION = Math.pow( 10, MAX_DECIMALS );
 
     //micro library to define unobtrusive jQuery hooks
     var hook = (function(){
@@ -87,8 +92,21 @@
 
     //Helpers
 
+    var now = typeof Date.now === "function"
+        ? Date.now
+        : function(){return +new Date(); };
+
     function preventDefault(e) {
         e.preventDefault();
+    }
+
+    function isInteger( num ) {
+        return ( num | 0 ) === num;
+    }
+
+    function isValidDecimalCount( num ) {
+        return isInteger( num ) &&
+            ( MIN_DECIMALS <= num && num <= MAX_DECIMALS );
     }
 
     function numberToString( num, decimals ) {
@@ -114,7 +132,8 @@
     }
 
     function normalize( value ) {
-        return ( Math.round( value * 100000000 ) / 100000000 ) || 0;
+        return ( Math.round( value * FLOAT_PRECISION ) / FLOAT_PRECISION ) ||
+            0;
     }
 
     function snap( value, step ) {
@@ -185,7 +204,6 @@
         return Box;
     })();
 
-    //Todo use default value instead of min on failure
     var Slider = (function() {
         var method = Slider.prototype;
 
@@ -198,7 +216,7 @@
             this._min = +this._options.min;
             this._max = +this._options.max;
             this._defaultValue = 0;
-            this._decimals = 0;
+            this._decimals = +this._options.decimals;
             this._box = null;
             this._knobBox = null;
             this._isRtl = false;
@@ -208,6 +226,7 @@
             this._sliderElement = null;
             this._sliderKnobElement = null;
             this._sensitivity = +this._options.sensitivity;
+            this._lastMousewheel = now();
             this._$changed = $.proxy( this._changed, this );
             this._$keyDowned = $.proxy( this._keyDowned, this );
             this._$mouseWheeled = $.proxy( this._mouseWheeled, this );
@@ -275,6 +294,10 @@
                 this._max += 1;
             }
 
+            if( !isFinite( this._decimals ) ) {
+                this._decimals = -1;
+            }
+
             this._defaultValue = numberOrDefault( this._element[0].value,
                     numberOrDefault( this._element[0].defaultValue, this._min )
             );
@@ -288,13 +311,20 @@
                 this._defaultValue
             );
 
-            //Determine the number of decimal precision
-            //required by looking at the precision of step size
-            var decimalIndex = this._step.toString().indexOf(".");
+            if( !isValidDecimalCount( this._decimals ) ) {
+                //Determine the number of decimal precision
+                //required by looking at the precision of step size
+                var decimalIndex = this._step.toString().indexOf(".");
 
-            if( decimalIndex > -1 ) {
-                this._decimals =
-                    this._step.toString().length - ( decimalIndex + 1 );
+                if( decimalIndex > -1 ) {
+                    this._decimals =
+                        this._step.toString().length - ( decimalIndex + 1 );
+                }
+
+                if( !isValidDecimalCount( this._decimals ) ) {
+                    this._decimals =
+                        clamp( this._decimals, MIN_DECIMALS, MAX_DECIMALS );
+                }
             }
 
             this._sliderElement = $( this._options.template )
@@ -426,14 +456,18 @@
                 case 38: // up
                     e.preventDefault();
                     this._setValue( fMin( this._max, val + this._step ) );
-                    this._element.trigger( "slide" );
+                    this._element
+                        .trigger( "slide" )
+                        .trigger( "input" );
 
                 break;
 
                 case 40: //down
                     e.preventDefault();
                     this._setValue( fMax( this._min, val - this._step ) );
-                    this._element.trigger( "slide" );
+                    this._element
+                        .trigger( "slide" )
+                        .trigger( "input" );
                 break;
 
                 case 37: //left
@@ -451,7 +485,9 @@
                                 fMin( this._max, val + this._step )
                             );
                         }
-                        this._element.trigger( "slide" );
+                        this._element
+                            .trigger( "slide" )
+                            .trigger( "input" );
                     }
                     break;
 
@@ -472,10 +508,9 @@
             }
 
             var evt = e.originalEvent,
-                val = numberOrDefault(
-                    this._element.val(),
-                    this._defaultValue
-                ),
+                time = now(),
+                elapsed = time - this._lastMousewheel,
+                val = this._getValue(),
                 delta;
             //Scrollwheel doing multiple things at once is always bad
             e.preventDefault();
@@ -489,14 +524,35 @@
             }
 
             if( delta != null ) {
+                var sensitivity = plugin.options.sensitivity / 100;
+                var step = elapsed > 300
+                    ? this._step
+                    : fMax(
+                        fAbs( this._max - this._min ) * sensitivity,
+                        this._step
+                    );
+
                 if( delta > 0 ) {
-                    this._setValue( fMin( this._max, val + this._step ) );
+                    this._setValue(
+                        snap(
+                            fMin( this._max, val + step ),
+                            this._step
+                        )
+                    );
                 }
                 else {
-                    this._setValue( fMax( this._min, val - this._step ) );
+                    this._setValue(
+                        snap(
+                            fMax( this._min, val - step ),
+                            this._step
+                        )
+                    );
                 }
-                this._element.trigger( "slide" );
+                this._element
+                    .trigger( "slide" )
+                    .trigger( "input" );
             }
+            this._lastMousewheel = time;
         };
 
         //Begin the slider drag process
@@ -551,6 +607,7 @@
                 this._mouseReleased();
                 return;
             }
+            var curValue = this._getValue();
 
             var box = this._box,
                 position,
@@ -575,7 +632,26 @@
                 value = snap( value, this._step );
             }
             this._setValue( normalize( value ) );
-            this._element.trigger( "slide" );
+            if( curValue !== this._getValue() ){
+                this._element
+                    .trigger( "slide" )
+                    .trigger( "input" );
+            }
+        };
+
+        method._getValue = function() {
+            var ret = numberOrDefault(
+                this._element[0].value,
+                this._defaultValue
+            );
+            return snap(
+                clamp(
+                    normalize( ret ),
+                    this._min,
+                    this._max
+                ),
+                this._step
+            );
         };
 
         method._setValue = function( value, sliderOnly ) {
@@ -687,7 +763,7 @@
         max: 100,
         step: 1,
         focusable: true,
-        sensitivity: 4,
+        decimals: -1,
         rtl: false,
         slider: "body",
         template: "<div class='input-slider'>" +
@@ -696,7 +772,8 @@
     };
 
     plugin.options = {
-        decimalPoint: "."
+        decimalPoint: ".",
+        sensitivity: 4
     };
 
     plugin.refresh = function() {

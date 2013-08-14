@@ -25,11 +25,29 @@ the api size to minimum.
 Options
 -------
 
-* min - the minimum value, default 1
-* max - the maximum value, default 100
-* step - the step size, default 1. Must be > 0
-* focusable - is slider focusable? default is true
-* rtl - specify right-to-left direction on the slider. The default is left-to-right. Only has an effect on horizontally oriented sliders. Automatically picked up from the active CSS writing direction on the element.
+* `Number min` -  the minimum value, default `1`
+* `Number max` - the maximum value, default `100`
+* `Number step` - the step size, default `1`. Must be greater than `0`
+* `Integer decimals` - the decimal precision for the input element. Must be between `0` and `8`. By default it is inferred from `step`. E.g. a step size of `0.05` gives decimal precision of `2` while `0.5` gives `1`.
+* `Boolean focusable` - is slider focusable? default is `true`
+* `Boolean rtl` - specify right-to-left direction on the slider. The default is left-to-right. Only has an effect on horizontally oriented sliders. Automatically picked up from the active CSS writing direction on the element
+
+Global options
+--------
+
+* `String decimalPoint` - the decimal point character. Defaults to `"."`
+* `Integer sensitivity` - scroll wheel sensitivity. Defaults to `4`
+
+Global options cannot be configured on per-instance basis. This simplifies
+per-instance configuration for features that only make sense to be equal
+for all sliders on the page.
+
+E.g. to change decimal point to a comma, write:
+
+    $.fn.slider.options.decimalPoint = ",";
+    
+Note that the above should be written right after including the script src, 
+or at latest before `DOMReady` event.
 
 Methods
 -------
@@ -57,7 +75,8 @@ Events
 ------
 
 * slidestart - fired before dragging the slider has started. Call `preventDefault()` on the event object to prevent sliding
-* slide - fired constantly as the slider is being dragged
+*Deprecated*  <del>* slide - fired constantly as the slider is being dragged</del>
+* input - fired constantly as the slider is being dragged or otherwise changes value through user action
 * slideend - fired before dragging the slider ends
 
 Markup/Data-API
