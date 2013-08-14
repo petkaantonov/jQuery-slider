@@ -32,9 +32,9 @@
     var setTimeout = window.setTimeout;
     var INSTANCE_KEY = "range-slider-instance";
     var isFinite = window.isFinite;
-    var fMax = function( a, b ){ return Math.max( a, b ); };
-    var fMin = function( a, b ){ return Math.min( a, b ); };
-    var fAbs = function( a ){ return Math.abs( a ); };
+    var fMax = function( a, b ) { return Math.max( a, b ); };
+    var fMin = function( a, b ) { return Math.min( a, b ); };
+    var fAbs = function( a ) { return Math.abs( a ); };
 
     var MIN_DECIMALS = 0;
     var MAX_DECIMALS = 8;
@@ -327,8 +327,16 @@
                 }
             }
 
-            this._sliderElement = $( this._options.template )
-                .appendTo( this._options.slider );
+            this._sliderElement = $( this._options.template );
+            var target = $( this._options.slider );
+            if( !target.length ) {
+                this._sliderElement.insertBefore( this._element );
+            }
+            else {
+                this._sliderElement.appendTo( this._options.slider );
+            }
+
+
 
             this._sliderKnobElement = this._sliderElement
                 .find( ".js-slider-knob" );
@@ -508,7 +516,7 @@
             }
 
             var evt = e.originalEvent,
-                time = now(),
+                time = e.timeStamp,
                 elapsed = time - this._lastMousewheel,
                 val = this._getValue(),
                 delta;
@@ -525,9 +533,10 @@
 
             if( delta != null ) {
                 var sensitivity = plugin.options.sensitivity / 100;
+
                 var step = elapsed > 300
-                    ? this._step
-                    : fMax(
+                    ? this._step //Minimal sensitivity when slowly scrolling
+                    : fMax( //Normal sensitivity when normally/fastly scrolling
                         fAbs( this._max - this._min ) * sensitivity,
                         this._step
                     );
@@ -580,7 +589,7 @@
                     //perfectly still and e.which !== 1
                     //in mousemove handler isn't detected
                     "mouseup.rangeslider": this._$mouseReleased,
-                    //Remove all this crap while dragging
+                    //Prevent this crap while dragging
                     "selectstart.rangeslider": preventDefault,
                     "dragstart.rangeslider": preventDefault
                 });
