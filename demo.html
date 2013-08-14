@@ -18,21 +18,21 @@
             margin-top: 0px;
             margin-bottom: 18px;
         }
-        
+
         h4 {
             margin-bottom: 8px;
         }
-        
+
         .hilite {
             color: #FF8C00;
         }
-        
+
     </style>
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    
+
  </head>
  <body>
 
@@ -51,17 +51,17 @@
                     <li>Keyup/keydown while the focus is in original input</li>
                     <li>Manually entering value (automatically validated & snapped)</li>
                 </ul>
-                
+
                 <p>See <a href="https://github.com/petkaantonov/jQuery-slider">project page</a> for documentation.</p>
-                
+
             </div>
         </div>
-        
+
         <div class="row"><div class="span12"><hr></div></div>
-                
- 
- 
- 
+
+
+
+
          <div class="row">
              <div class="span4">
                  <h4>Basic example</h4>
@@ -76,12 +76,12 @@
                     <pre class="prettyprint"></pre>
              </div>
          </div>
-         
+
         <div class="row"><div class="span12"><hr></div></div>
 
-  
-  
-  
+
+
+
            <div class="row">
                <div class="span4">
                    <h4>Short range</h4>
@@ -96,9 +96,9 @@
                       <pre class="prettyprint"></pre>
                </div>
            </div>
-           
+
         <div class="row"><div class="span12"><hr></div></div>
-  
+
 
            <div class="row">
                <div class="span4">
@@ -113,9 +113,9 @@
                       <pre class="prettyprint"></pre>
                </div>
            </div>
-           
+
         <div class="row"><div class="span12"><hr></div></div>
-  
+
 
              <div class="row">
                  <div class="span4">
@@ -131,17 +131,17 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
              <div class="row">
                  <div class="span4">
                      <h4>Negative decimal range</h4>
@@ -155,10 +155,10 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
-        
+
+
              <div class="row">
                  <div class="span4">
                      <h4>Disabled</h4>
@@ -173,9 +173,9 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
+
              <div class="row">
                  <div class="span4">
                      <h4>Multiple in same container</h4>
@@ -195,10 +195,10 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
-    
+
+
              <div class="row">
                  <div class="span4">
                      <h4>Prevent default</h4>
@@ -219,12 +219,12 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
-    
- 
-    
+
+
+
+
              <div class="row">
                  <div class="span4">
                      <h4>Hidden input</h4>
@@ -233,7 +233,7 @@
 <div class="slider span2" id="hidden-input"></div>
 <input id="hidden-input-input" data-slider="#hidden-input" class="span1 hide" value="25">
 <span></span>
-<script type="text/javascript">    
+<script type="text/javascript">
     $("#hidden-input-input").on( "slide", function(){
         $( this ).next().html( "The value is: " + this.value );
     }).trigger("slide"); //Show the initial value
@@ -245,17 +245,17 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
              <div class="row">
                  <div class="span4">
                      <h4>Datetime input</h4>
@@ -267,7 +267,7 @@
 <script type="text/javascript">
     $("#date-input-input").on( "slide", function(){
         $( this ).next().html( "The value is: " + ( new Date ( this.value * 1000 * 60 ) + "" ) );
-    }).trigger("slide"); //Show the initial value    
+    }).trigger("slide"); //Show the initial value
 </script>
                    </div>
                  </div>
@@ -276,17 +276,17 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
              <div class="row">
                  <div class="span4">
                      <h4>Input inside a scrollable div</h4>
@@ -306,17 +306,17 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
              <div class="row">
                  <div class="span4">
                      <h4>RTL slider</h4>
@@ -332,21 +332,21 @@
                         <pre class="prettyprint"></pre>
                  </div>
              </div>
-             
+
           <div class="row"><div class="span12"><hr></div></div>
-  
+
         <div class="row">
             <div class="span12">
-        
+
                         <h3>Markup</h3>
                         <p>Markup listed below sliders doesn't include the control-group container due to <code>.outerHTML</code> inconsistency issues.</p>
-                        
+
                         <p>Markup is generated with:</p>
         <pre class="prettyprint">
 $( ".markup-container" ).each( function(){
 
-    $(this).closest(".row").find(".prettyprint").html( 
-        $.trim( 
+    $(this).closest(".row").find(".prettyprint").html(
+        $.trim(
             $(this).html()
             .replace( /&/g, "&amp;").replace( /</g, "&lt;" ).replace( />/g, "&gt;" )
             .replace( /data-slider=/g, '&lt;span class="hilite"&gt;data-slider&lt;/span&gt;=' )
@@ -358,15 +358,17 @@ $( ".markup-container" ).each( function(){
             </div>
 
         </div>
-        
+
     </div>
     <script type="text/javascript" src="./js/jQuery-slider.js"></script>
 
-    <script type="text/javascript">        
+
+    <script type="text/javascript">
+        $.fn.slider.options.decimalPoint = ",";
         $( ".markup-container" ).each( function(){
 
-            $(this).closest(".row").find(".prettyprint").html( 
-                $.trim( 
+            $(this).closest(".row").find(".prettyprint").html(
+                $.trim(
                     $(this).html()
                     .replace( /&/g, "&amp;").replace( /</g, "&lt;" ).replace( />/g, "&gt;" )
                     .replace( /data-slider=/g, '<span class="hilite">data-slider</span>=' )

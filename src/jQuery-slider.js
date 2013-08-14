@@ -28,8 +28,10 @@
             ? function( obj ) { return obj; }
             : Object.seal;
 
-
+    var clearTimeout = window.clearTimeout;
+    var setTimeout = window.setTimeout;
     var INSTANCE_KEY = "range-slider-instance";
+    var isFinite = window.isFinite;
     var fMax = function( a, b ){ return Math.max( a, b ); };
     var fMin = function( a, b ){ return Math.min( a, b ); };
 
@@ -89,10 +91,23 @@
         e.preventDefault();
     }
 
-    function numberOrDefault( str, fallback ) {
-        str = (str + "").replace( ",", "." );
+    function numberToString( num, decimals ) {
+        num = +num;
+        var str = decimals
+            ? num.toFixed( decimals )
+            : "" + num;
 
-        if( isNaN( str ) ) {
+        return str.replace( ".", plugin.options.decimalPoint );
+    }
+
+    function numberOrDefault( str, fallback ) {
+        str = (str + "")
+            .replace( plugin.options.decimalPoint, "." )
+            .replace( /\s/g, "");
+
+        if( !isFinite( str ) ||
+            //whitespace is considered 0 by js
+            /^\s*$/.test(str) ) {
             return fallback;
         }
         return +str;
@@ -112,6 +127,20 @@
 
     function clamp( val, min, max ) {
         return fMax( fMin( val, max ), min );
+    }
+
+    function debounce( fn, timeout, ctx ) {
+        var id = -1;
+        return function() {
+            if( id > -1 ) {
+                clearTimeout( id );
+            }
+            var args = [].slice.call( arguments );
+            id = setTimeout( function() {
+                fn.apply( ctx, args );
+                id = -1;
+            }, timeout );
+        };
     }
 
     var clearSelection = (function() {
@@ -156,7 +185,7 @@
         return Box;
     })();
 
-
+    //Todo use default value instead of min on failure
     var Slider = (function() {
         var method = Slider.prototype;
 
@@ -168,6 +197,7 @@
             this._step = +this._options.step;
             this._min = +this._options.min;
             this._max = +this._options.max;
+            this._defaultValue = 0;
             this._decimals = 0;
             this._box = null;
             this._knobBox = null;
@@ -177,14 +207,17 @@
             this._isSliding = false;
             this._sliderElement = null;
             this._sliderKnobElement = null;
+            this._sensitivity = +this._options.sensitivity;
             this._$changed = $.proxy( this._changed, this );
             this._$keyDowned = $.proxy( this._keyDowned, this );
             this._$mouseWheeled = $.proxy( this._mouseWheeled, this );
             this._$mouseDowned = $.proxy( this._mouseDowned, this );
             this._$mouseMoved = $.proxy( this._mouseMoved, this );
             this._$mouseReleased = $.proxy( this._mouseReleased, this );
+            this._$keyPressed = $.proxy( this._keyPressed, this );
             this._$blurred = $.proxy( this._blurred, this );
             this._$focused = $.proxy( this._focused, this );
+            this._$input = debounce( this._input, 35, this );
             seal( this );
             this._init();
         }
@@ -220,9 +253,13 @@
             }
         };
 
-        method._applyValue = function( val ) {
+        //SliderOnly means the value is only applied to the slider
+        //not to the input element
+        //to avoid flicker on the input element
+        //when the value originates from the input element typing
+        method._applyValue = function( val, sliderOnly ) {
             var value = snap( clamp( val, this._min, this._max ), this._step );
-            this._setValue( value );
+            this._setValue( value, sliderOnly );
         };
 
         method._init = function() {
@@ -238,11 +275,18 @@
                 this._max += 1;
             }
 
+            this._defaultValue = numberOrDefault( this._element[0].value,
+                    numberOrDefault( this._element[0].defaultValue, this._min )
+            );
+
             this._isRtl = this._element
                 .css( "direction" )
                 .toLowerCase() === "rtl" || !!this._options.rtl;
 
-            var val = numberOrDefault( this._element.val(), this._min );
+            var val = numberOrDefault(
+                this._element.val(),
+                this._defaultValue
+            );
 
             //Determine the number of decimal precision
             //required by looking at the precision of step size
@@ -268,11 +312,18 @@
             this._setDisabled( this._element.prop( "disabled" ) );
 
             this._element.on( {
+                "keypress.rangeslider": this._$keyPressed,
                 "change.rangeslider": this._$changed,
                 "keydown.rangeslider": this._$keyDowned,
                 "mousewheel.rangeslider": this._$mouseWheeled,
                 "DOMMouseScroll.rangeslider": this._$mouseWheeled
-            });
+            }).on(
+                "cut.rangeslider input.rangeslider paste.rangeslider " +
+                "mouseup.rangeslider keydown.rangeslider keyup.rangeslider " +
+                "keypress.rangeslider mousewheel.rangeslider " +
+                "DOMMouseScroll.rangeslider",
+                this._$input
+            );
 
             this._sliderElement.on( {
                 "focusin.rangeslider": this._$focused,
@@ -296,10 +347,24 @@
             //we can set the initial slider position
 
             this._calculateDragStartOffset( {} );
-            this._applyValue( val );
+            this._applyValue( val, false );
 
             this._element.on( "destroy.rangeslider",
                 $.proxy( this.destroy, this ) );
+        };
+
+        method._input = function() {
+            var val = numberOrDefault( this._element.val(), 0/0 );
+            if( isFinite( val ) ) {
+                this._applyValue( val, true );
+            }
+        };
+
+        method._keyPressed = function(e) {
+            var ch = String.fromCharCode(e.which);
+            if( !/[0-9.,\s]/.test( ch ) ) {
+                e.preventDefault();
+            }
         };
 
         method._blurred = function() {
@@ -340,19 +405,17 @@
             }
         };
         //onchange
-        method._changed = function( e ) {
-            var val = numberOrDefault( this._element.val(), this._min );
-            if( val === this._min && e.type === "input" ) {
-                //Allow input to be invalid while typing
-                //and coerce when blurred ("change")
-                return;
-            }
-            this._applyValue( val );
+        method._changed = function() {
+            var val = numberOrDefault(
+                this._element.val(),
+                this._defaultValue
+            );
+            this._applyValue( val, false );
         };
 
         //onkeydown
         method._keyDowned = function( e ) {
-           var val = numberOrDefault( this._element.val(), this._min );
+           var val = numberOrDefault( this._element.val(), this._defaultValue );
 
             if( this._isDisabled ) {
                 return;
@@ -409,7 +472,10 @@
             }
 
             var evt = e.originalEvent,
-                val = numberOrDefault( this._element.val(), this._min ),
+                val = numberOrDefault(
+                    this._element.val(),
+                    this._defaultValue
+                ),
                 delta;
             //Scrollwheel doing multiple things at once is always bad
             e.preventDefault();
@@ -436,18 +502,21 @@
         //Begin the slider drag process
         method._mouseDowned = function( e ) {
             if( e.which === 1 && !this._isDisabled ) {
+                e.preventDefault();
                 var slideEvt = $.Event( "slidestart");
                 this._element.trigger( slideEvt );
 
                 if( slideEvt.isDefaultPrevented() ) {
-                    e.preventDefault();
                     return;
                 }
+
 
                 this._calculateBox();
                 this._calculateDragStartOffset( e );
 
+
                 clearSelection();
+
 
                 $( document ).on( {
                     "mousemove.rangeslider": this._$mouseMoved,
@@ -509,15 +578,18 @@
             this._element.trigger( "slide" );
         };
 
-        method._setValue = function( value ) {
+        method._setValue = function( value, sliderOnly ) {
             var offset, progress,
                 span;
 
             value = clamp( normalize( value ), this._min, this._max );
 
-            this._element[0].value = this._decimals
-                ? value.toFixed(this._decimals)
-                : value;
+            if( !sliderOnly ) {
+                this._element[0].value = numberToString(
+                    value,
+                    this._decimals
+                );
+            }
 
             progress = ( value - this._min ) / ( this._max - this._min );
 
@@ -559,7 +631,7 @@
             if( !instance ) {
                 return;
             }
-            instance._setValue( value );
+            instance._setValue( value, false );
         }
 
         function disabledSetter( elem, value ) {
@@ -615,11 +687,16 @@
         max: 100,
         step: 1,
         focusable: true,
+        sensitivity: 4,
         rtl: false,
         slider: "body",
         template: "<div class='input-slider'>" +
             "<div class='input-slider-knob js-slider-knob'></div>" +
             "</div>"
+    };
+
+    plugin.options = {
+        decimalPoint: "."
     };
 
     plugin.refresh = function() {
