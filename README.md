@@ -90,8 +90,8 @@ You can use the slider plugin without extra javascript by specifying data attrib
 The element only needs a `data-slider` attribute for it to be picked up. The value is used as a jQuery selector to find the element where the slider will be rendered.
 You may also leave selector out, in this case the slider element will be placed before the input element like so:
 
-    <div>
-        <!-- Slider container will be placed here with default settings -->
+    <div class="slider">
+        <!-- Slider will be placed here -->
         <input data-slider>
     </div>
     

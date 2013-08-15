@@ -67,8 +67,9 @@
                  <h4>Basic example</h4>
                  <p>Default settings are min=1, max=100, step=1</p>
                  <div class="markup-container">
-<div class="slider span2" id="default"></div>
-<input data-slider="#default" class="span1">
+<div class="slider span2">
+    <input data-slider class="span1">
+</div>
                 </div>
              </div>
              <div class="span8">
@@ -388,6 +389,7 @@ $( ".markup-container" ).each( function(){
                     $(this).html()
                     .replace( /&/g, "&amp;").replace( /</g, "&lt;" ).replace( />/g, "&gt;" )
                     .replace( /data-slider=/g, '<span class="hilite">data-slider</span>=' )
+                    .replace( /=(""|'')/g, "")
                 )
             );
         });

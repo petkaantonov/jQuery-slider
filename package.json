@@ -4,6 +4,8 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.5.4",
-    "grunt-closure-compiler": "0.0.18"
+    "grunt-closure-compiler": "0.0.18",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-watch": "~0.5.1"
   }
 }
