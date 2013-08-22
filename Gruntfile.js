@@ -33,6 +33,7 @@ module.exports = function( grunt ) {
                 "./src/utils.js",
                 "./src/hook.js",
                 "./src/box.js",
+                "./src/slider_knob.js",
                 "./src/slider.js",
                 "./src/plugin.js",
                 "./src/end.js"
@@ -50,7 +51,7 @@ module.exports = function( grunt ) {
             files: [
                 "./src/**/*"
             ],
-            tasks: ["concat", "build"],
+            tasks: ["concat", "build", "clean"],
             options: {
               interrupt: true,
               debounceDelay: 2500

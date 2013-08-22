@@ -10,6 +10,7 @@ var isFinite = window.isFinite;
 var fMax = function( a, b ) { return Math.max( a, b ); };
 var fMin = function( a, b ) { return Math.min( a, b ); };
 var fAbs = function( a ) { return Math.abs( a ); };
+var Date = window.Date;
 
 var MIN_DECIMALS = 0;
 var MAX_DECIMALS = 8;

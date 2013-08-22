@@ -1,4 +1,6 @@
 var plugin;
+var postFilters = [];
+
 plugin = $.fn.slider = function( option ) {
     var args = [].slice.call( arguments, 1 );
     return this.filter( "input" ).each( function() {
@@ -19,6 +21,9 @@ plugin = $.fn.slider = function( option ) {
                 options
             );
             instance = new Slider( this, options );
+            $.each( postFilters, function(i, fn) {
+                fn.call( $this[0], instance, options );
+            });
             $this.data( INSTANCE_KEY, instance );
         }
         if( typeof option === "string" &&
@@ -54,6 +59,10 @@ plugin.refresh = function() {
 };
 
 $( plugin.refresh );
+
+plugin.postFilter = function( fn ) {
+    if( typeof fn === "function" ) postFilters.push( fn );
+};
 
 $.ajaxPrefilter( function( o, oo, jqxhr ) {
     (jqxhr.complete || jqxhr.always)( plugin.refresh );

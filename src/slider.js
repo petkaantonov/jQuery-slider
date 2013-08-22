@@ -22,15 +22,15 @@ function Slider( element, options ) {
     this._sensitivity = +this._options.sensitivity;
     this._lastMousewheel = now();
     this._$changed = $.proxy( this._changed, this );
-    this._$keyDowned = $.proxy( this._keyDowned, this );
-    this._$mouseWheeled = $.proxy( this._mouseWheeled, this );
-    this._$mouseDowned = $.proxy( this._mouseDowned, this );
-    this._$mouseMoved = $.proxy( this._mouseMoved, this );
-    this._$mouseReleased = $.proxy( this._mouseReleased, this );
-    this._$keyPressed = $.proxy( this._keyPressed, this );
-    this._$blurred = $.proxy( this._blurred, this );
-    this._$focused = $.proxy( this._focused, this );
-    this._$input = debounce( this._input, 35, this );
+    this._$didKeyDown = $.proxy( this._didKeyDown, this );
+    this._$didMouseWheel = $.proxy( this._didMouseWheel, this );
+    this._$didMouseDown = $.proxy( this._didMouseDown, this );
+    this._$didMouseMove = $.proxy( this._didMouseMove, this );
+    this._$didMouseUp = $.proxy( this._didMouseUp, this );
+    this._$didKeyPress = $.proxy( this._didKeyPress, this );
+    this._$didBlur = $.proxy( this._didBlur, this );
+    this._$didFocus = $.proxy( this._didFocus, this );
+    this._$input = debounce( this.didInput, 35, this );
     seal( this );
     this._init();
 }
@@ -62,7 +62,7 @@ method._setDisabled = function( disabled ) {
     this._element.prop( "disabled", this._isDisabled );
 
     if( !disabled ) {
-        this._mouseReleased();
+        this._stopSliding();
     }
 };
 
@@ -144,11 +144,11 @@ method._init = function() {
     this._setDisabled( this._element.prop( "disabled" ) );
 
     this._element.on( {
-        "keypress.rangeslider": this._$keyPressed,
+        "keypress.rangeslider": this._$didKeyPress,
         "change.rangeslider": this._$changed,
-        "keydown.rangeslider": this._$keyDowned,
-        "mousewheel.rangeslider": this._$mouseWheeled,
-        "DOMMouseScroll.rangeslider": this._$mouseWheeled
+        "keydown.rangeslider": this._$didKeyDown,
+        "mousewheel.rangeslider": this._$didMouseWheel,
+        "DOMMouseScroll.rangeslider": this._$didMouseWheel
     }).on(
         "cut.rangeslider input.rangeslider paste.rangeslider " +
         "mouseup.rangeslider keydown.rangeslider keyup.rangeslider " +
@@ -158,14 +158,14 @@ method._init = function() {
     );
 
     this._sliderElement.on( {
-        "focusin.rangeslider": this._$focused,
-        "focus.rangeslider": this._$focused,
-        "focusout.rangeslider": this._$blurred,
-        "blur.rangeslider": this._$blurred,
-        "mousedown.rangeslider": this._$mouseDowned,
-        "mousewheel.rangeslider": this._$mouseWheeled,
-        "keydown.rangeslider": this._$keyDowned,
-        "DOMMouseScroll.rangeslider":this._$mouseWheeled
+        "focusin.rangeslider": this._$didFocus,
+        "focus.rangeslider": this._$didFocus,
+        "focusout.rangeslider": this._$didBlur,
+        "blur.rangeslider": this._$didBlur,
+        "mousedown.rangeslider": this._$didMouseDown,
+        "mousewheel.rangeslider": this._$didMouseWheel,
+        "keydown.rangeslider": this._$didKeyDown,
+        "DOMMouseScroll.rangeslider":this._$didMouseWheel
     });
 
     if( "step" in this._element[0] ) {
@@ -185,29 +185,29 @@ method._init = function() {
         $.proxy( this.destroy, this ) );
 };
 
-method._input = function() {
+method.didInput = function() {
     var val = numberOrDefault( this._element.val(), 0/0 );
     if( isFinite( val ) ) {
         this._applyValue( val, true );
     }
 };
 
-method._keyPressed = function(e) {
+method._didKeyPress = function(e) {
     var ch = String.fromCharCode(e.which);
     if( !/[0-9.,\s]/.test( ch ) ) {
         e.preventDefault();
     }
 };
 
-method._blurred = function() {
-    this._sliderElement.removeClass( "focused" );
+method._didBlur = function() {
+    this._sliderElement.removeClass( "didFocus" );
 };
 
-method._focused = function() {
+method._didFocus = function() {
     if( this._isDisabled ) {
         return;
     }
-    this._sliderElement.addClass( "focused" );
+    this._sliderElement.addClass( "didFocus" );
 };
 
 method._calculateBox = function() {
@@ -246,7 +246,7 @@ method._changed = function() {
 };
 
 //onkeydown
-method._keyDowned = function( e ) {
+method._didKeyDown = function( e ) {
    var val = numberOrDefault( this._element.val(), this._defaultValue );
 
     if( this._isDisabled ) {
@@ -304,7 +304,7 @@ method._keyDowned = function( e ) {
 };
 
 //Onmousewheel
-method._mouseWheeled = function( e ) {
+method._didMouseWheel = function( e ) {
     if( this._isDisabled ) {
         return;
     }
@@ -359,7 +359,7 @@ method._mouseWheeled = function( e ) {
 };
 
 //Begin the slider drag process
-method._mouseDowned = function( e ) {
+method._didMouseDown = function( e ) {
     if( e.which === 1 && !this._isDisabled ) {
         e.preventDefault();
         var slideEvt = $.Event( "slidestart");
@@ -378,36 +378,40 @@ method._mouseDowned = function( e ) {
 
 
         $( document ).on( {
-            "mousemove.rangeslider": this._$mouseMoved,
+            "mousemove.rangeslider": this._$didMouseMove,
             //in case mouse is released while holding
             //perfectly still and e.which !== 1
             //in mousemove handler isn't detected
-            "mouseup.rangeslider": this._$mouseReleased,
+            "mouseup.rangeslider": this._$didMouseUp,
             //Prevent this crap while dragging
             "selectstart.rangeslider": preventDefault,
             "dragstart.rangeslider": preventDefault
         });
 
-        this._sliderElement.addClass( "focused" );
+        this._sliderElement.addClass( "didFocus" );
         this._isSliding = true;
 
-        this._mouseMoved( e );
+        this._didMouseMove( e );
     }
 };
 
-method._mouseReleased = function() {
+method._stopSliding() {
     if( this._isSliding ) {
         $( document ).off( ".rangeslider" );
-        this._sliderElement.removeClass( "focused" );
+        this._sliderElement.removeClass( "didFocus" );
         this._isSliding = false;
         this._element.trigger( "slideend" );
     }
+}
+
+method._didMouseUp = function() {
+    this._stopSliding();
 };
 
-method._mouseMoved = function( e ) {
+method._didMouseMove = function( e ) {
     if( e.which !== 1 ) {
         //in case mouse is released and mouseup event wasn't detected
-        this._mouseReleased();
+        this._stopSliding();
         return;
     }
     var curValue = this._getValue();
