@@ -1,0 +1,1 @@
+})( this.jQuery, this, this.document );

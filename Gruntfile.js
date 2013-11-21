@@ -1,7 +1,6 @@
 module.exports = function( grunt ) {
 
-    var SRC_DEST = './src/jQuery-slider.js',
-        TMP_DEST = './js/tmp.js',
+    var TMP_DEST = './js/tmp.js',
         BUILD_DEST = './js/jQuery-slider.js',
         MIN_DEST = './js/jQuery-slider.min.js'
 
@@ -19,6 +18,43 @@ module.exports = function( grunt ) {
                 src: [
                     BUILD_DEST
                 ]
+            }
+        }
+    };
+
+    gruntConfig.concat = {
+        options: {
+            separator: '\n'
+        },
+
+        dist: {
+            src: [
+                "./src/begin.js",
+                "./src/utils.js",
+                "./src/hook.js",
+                "./src/box.js",
+                "./src/slider_knob.js",
+                "./src/slider.js",
+                "./src/plugin.js",
+                "./src/end.js"
+            ],
+
+            nonull: true,
+
+            dest: BUILD_DEST
+        }
+
+    };
+
+    gruntConfig.watch = {
+            scripts: {
+            files: [
+                "./src/**/*"
+            ],
+            tasks: ["concat", "build", "clean"],
+            options: {
+              interrupt: true,
+              debounceDelay: 2500
             }
         }
     };
@@ -42,11 +78,14 @@ module.exports = function( grunt ) {
     grunt.initConfig(gruntConfig);
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-closure-compiler');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+
 
     grunt.registerTask( "build", function() {
         var fs = require("fs");
 
-        var src = fs.readFileSync( SRC_DEST, "utf8" );
+        var src = fs.readFileSync( BUILD_DEST, "utf8" );
 
         var devSrc = src.replace( /%_PRODUCTION/g, "false" );
         var prodSrc = src.replace( /%_PRODUCTION/g, "true" );
@@ -62,6 +101,7 @@ module.exports = function( grunt ) {
 
     });
 
-    grunt.registerTask( "default", ["build", "jshint", "closure-compiler", "clean"] );
+    grunt.registerTask( "dev", ["concat", "build", "jshint", "clean"] );
+    grunt.registerTask( "default", ["concat", "build", "jshint", "closure-compiler", "clean"] );
 
 };

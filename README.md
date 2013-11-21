@@ -25,11 +25,29 @@ the api size to minimum.
 Options
 -------
 
-* min - the minimum value, default 1
-* max - the maximum value, default 100
-* step - the step size, default 1. Must be > 0
-* focusable - is slider focusable? default is true
-* rtl - specify right-to-left direction on the slider. The default is left-to-right. Only has an effect on horizontally oriented sliders. Automatically picked up from the active CSS writing direction on the element.
+* `Number min` -  the minimum value, default `1`
+* `Number max` - the maximum value, default `100`
+* `Number step` - the step size, default `1`. Must be greater than `0`
+* `Integer decimals` - the decimal precision for the input element. Must be between `0` and `8`. By default it is inferred from `step`. E.g. a step size of `0.05` gives decimal precision of `2` while `0.5` gives `1`.
+* `Boolean focusable` - is slider focusable? default is `true`
+* `Boolean rtl` - specify right-to-left direction on the slider. The default is left-to-right. Only has an effect on horizontally oriented sliders. Automatically picked up from the active CSS writing direction on the element
+
+Global options
+--------
+
+* `String decimalPoint` - the decimal point character. Defaults to `"."`
+* `Integer sensitivity` - scroll wheel sensitivity. Defaults to `4`
+
+Global options cannot be configured on per-instance basis. This simplifies
+per-instance configuration for features that only make sense to be equal
+for all sliders on the page.
+
+E.g. to change decimal point to a comma, write:
+
+    $.fn.slider.options.decimalPoint = ",";
+    
+Note that the above should be written right after including the script src, 
+or at latest before `DOMReady` event.
 
 Methods
 -------
@@ -57,7 +75,8 @@ Events
 ------
 
 * slidestart - fired before dragging the slider has started. Call `preventDefault()` on the event object to prevent sliding
-* slide - fired constantly as the slider is being dragged
+*Deprecated*  <del>* slide - fired constantly as the slider is being dragged</del>
+* input - fired constantly as the slider is being dragged or otherwise changes value through user action
 * slideend - fired before dragging the slider ends
 
 Markup/Data-API
@@ -69,9 +88,16 @@ You can use the slider plugin without extra javascript by specifying data attrib
     <input data-slider="#target" data-min="1" data-max="100" data-step="1">
     
 The element only needs a `data-slider` attribute for it to be picked up. The value is used as a jQuery selector to find the element where the slider will be rendered.
+You may also leave selector out, in this case the slider element will be placed before the input element like so:
 
+    <div class="slider">
+        <!-- Slider will be placed here -->
+        <input data-slider>
+    </div>
+    
 **Note**: dynamically created elements need to be called manually with js. You may also call `$.fn.slider.refresh()` at any point to instantiate any
-uninitialized `data-slider` inputs. It is automatically called once on DOM ready event which makes the data API work.
+uninitialized `data-slider` inputs. It is automatically called once on DOM ready event. The plugin is also automatically refreshed
+after any AJAX request completes.
 
 The disabled attribute of an input is automatically used to disable a slider. A slider will automatically
 be vertically oriented if its dimensions suggest so (height > width).
