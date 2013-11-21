@@ -61,7 +61,9 @@ plugin.refresh = function() {
 $( plugin.refresh );
 
 plugin.postFilter = function( fn ) {
-    if( typeof fn === "function" ) postFilters.push( fn );
+    if( typeof fn === "function" ) {
+        postFilters.push( fn );
+    }
 };
 
 $.ajaxPrefilter( function( o, oo, jqxhr ) {

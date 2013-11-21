@@ -19,11 +19,6 @@ function SliderKnob( elem, options ) {
 }
 
 method._init = function() {
-    var tmpl = this._options.template;
-    var elem = this._knobElem = $( tmpl )
-        .find( ".js-slider-knob" )
-        .eq( 0 )
-        .detach();
 };
 
 method.destroy = function() {

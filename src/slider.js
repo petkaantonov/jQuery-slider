@@ -1,6 +1,3 @@
-var Slider = (function() {
-var method = Slider.prototype;
-
 function Slider( element, options ) {
     this._element = $( element );
     this._options = options;
@@ -36,11 +33,11 @@ function Slider( element, options ) {
 }
 
 //Deprecated
-method.disabled = function( disabled ) {
+Slider.prototype.disabled = function( disabled ) {
    this._setDisabled( !!disabled );
 };
 
-method.destroy = function() {
+Slider.prototype.destroy = function() {
     this._sliderElement.remove();
     this._element
         .off( ".rangeslider" )
@@ -51,7 +48,7 @@ method.destroy = function() {
         this._sliderKnobElement = null;
 };
 
-method._setDisabled = function( disabled ) {
+Slider.prototype._setDisabled = function( disabled ) {
     this._isDisabled = disabled;
     if( this._isDisabled ) {
         this._sliderElement.addClass( "disabled" );
@@ -70,12 +67,12 @@ method._setDisabled = function( disabled ) {
 //not to the input element
 //to avoid flicker on the input element
 //when the value originates from the input element typing
-method._applyValue = function( val, sliderOnly ) {
+Slider.prototype._applyValue = function( val, sliderOnly ) {
     var value = snap( clamp( val, this._min, this._max ), this._step );
     this._setValue( value, sliderOnly );
 };
 
-method._init = function() {
+Slider.prototype._init = function() {
     if( !this._step || this._step < 0 ) {
         this._step = 1;
     }
@@ -185,37 +182,37 @@ method._init = function() {
         $.proxy( this.destroy, this ) );
 };
 
-method.didInput = function() {
+Slider.prototype.didInput = function() {
     var val = numberOrDefault( this._element.val(), 0/0 );
     if( isFinite( val ) ) {
         this._applyValue( val, true );
     }
 };
 
-method._didKeyPress = function(e) {
+Slider.prototype._didKeyPress = function(e) {
     var ch = String.fromCharCode(e.which);
     if( !/[0-9.,\s]/.test( ch ) ) {
         e.preventDefault();
     }
 };
 
-method._didBlur = function() {
+Slider.prototype._didBlur = function() {
     this._sliderElement.removeClass( "didFocus" );
 };
 
-method._didFocus = function() {
+Slider.prototype._didFocus = function() {
     if( this._isDisabled ) {
         return;
     }
     this._sliderElement.addClass( "didFocus" );
 };
 
-method._calculateBox = function() {
+Slider.prototype._calculateBox = function() {
     this._box = new Box( this._sliderElement );
     this._knobBox = new Box( this._sliderKnobElement );
 };
 
-method._calculateDragStartOffset = function( e ) {
+Slider.prototype._calculateDragStartOffset = function( e ) {
     var offset;
 
     //The drag started on the knob
@@ -237,7 +234,7 @@ method._calculateDragStartOffset = function( e ) {
     }
 };
 //onchange
-method._changed = function() {
+Slider.prototype._changed = function() {
     var val = numberOrDefault(
         this._element.val(),
         this._defaultValue
@@ -246,7 +243,7 @@ method._changed = function() {
 };
 
 //onkeydown
-method._didKeyDown = function( e ) {
+Slider.prototype._didKeyDown = function( e ) {
    var val = numberOrDefault( this._element.val(), this._defaultValue );
 
     if( this._isDisabled ) {
@@ -304,7 +301,7 @@ method._didKeyDown = function( e ) {
 };
 
 //Onmousewheel
-method._didMouseWheel = function( e ) {
+Slider.prototype._didMouseWheel = function( e ) {
     if( this._isDisabled ) {
         return;
     }
@@ -359,7 +356,7 @@ method._didMouseWheel = function( e ) {
 };
 
 //Begin the slider drag process
-method._didMouseDown = function( e ) {
+Slider.prototype._didMouseDown = function( e ) {
     if( e.which === 1 && !this._isDisabled ) {
         e.preventDefault();
         var slideEvt = $.Event( "slidestart");
@@ -395,20 +392,20 @@ method._didMouseDown = function( e ) {
     }
 };
 
-method._stopSliding() {
+Slider.prototype._stopSliding = function() {
     if( this._isSliding ) {
         $( document ).off( ".rangeslider" );
         this._sliderElement.removeClass( "didFocus" );
         this._isSliding = false;
         this._element.trigger( "slideend" );
     }
-}
+};
 
-method._didMouseUp = function() {
+Slider.prototype._didMouseUp = function() {
     this._stopSliding();
 };
 
-method._didMouseMove = function( e ) {
+Slider.prototype._didMouseMove = function( e ) {
     if( e.which !== 1 ) {
         //in case mouse is released and mouseup event wasn't detected
         this._stopSliding();
@@ -446,7 +443,7 @@ method._didMouseMove = function( e ) {
     }
 };
 
-method._getValue = function() {
+Slider.prototype._getValue = function() {
     var ret = numberOrDefault(
         this._element[0].value,
         this._defaultValue
@@ -461,7 +458,7 @@ method._getValue = function() {
     );
 };
 
-method._setValue = function( value, sliderOnly ) {
+Slider.prototype._setValue = function( value, sliderOnly ) {
     var offset, progress,
         span;
 
@@ -529,5 +526,3 @@ function disabledSetter( elem, value ) {
 hook.define( hook.VAL, "text", hook.SETTER, valueSetter );
 hook.define( hook.PROP, "disabled", hook.SETTER, disabledSetter );
 hook.define( hook.ATTR, "disabled", hook.SETTER, disabledSetter );
-
-return Slider;})();
